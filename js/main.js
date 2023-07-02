@@ -20,6 +20,7 @@ const renderPopupProperties = () => {
         passwordInput.type === "text"
         ? (passwordInput.type = "password")
         : (passwordInput.type = "text");
+        passwordInput.focus();
     });
 
     closePopupBtn.addEventListener('click', () => {

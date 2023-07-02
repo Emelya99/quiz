@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BrainTeaserHub</title>
     <!-- Fav -->
-    <link rel="shortcut icon" href="images/fav.png" type="image/x-icon">
+    <link rel="shortcut icon" href="images/fav.svg" type="image/x-icon">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,7 +29,7 @@
                         <img src="images/logo.svg" alt="logo">
                     </a>
                     <div class="user-profile">
-                        <p class="name">Hello, <span>Artur#212</span>👋🏼</p>
+                        <p class="name">Hello, <span>Artur #212</span>👋</p>
                     </div>
                     <ul class="auth-btns">
                         <li>
@@ -48,12 +48,197 @@
 
         <!-- Main -->
         <main>
-            content
+            <!-- Quiz Section -->
+            <section class="quiz">
+                <div class="container">
+                    <div class="inner">
+                        <div class="left-part">
+                            <!-- Step 1 -->
+                            <div class="quiz-box box-shadow">
+                                <h2 class="title">
+                                    Rules: There are 10 questions with one correct answer each. The faster you answer, the more points you earn. <br>
+                                    <span>Are you ready?</span>
+                                </h2>
+                                <div class="btn-container center">
+                                    <button class="main-btn">Start</button>
+                                </div>
+                            </div>
+                            <!-- Loader -->
+                            <div class="quiz-box box-shadow">
+                                <div class="loader"><div></div><div></div><div></div></div>
+                            </div>
+                            <!-- Step 2 -->
+                            <div class="quiz-box box-shadow">
+                                <div class="quiz-question">
+                                    <h2 class="title">Which year was the company Apple founded?</h2>
+                                    <ul class="answears-box">
+                                        <li><p class="item true">A: 1973</p></li>
+                                        <li><p class="item false">B: 1984</p></li>
+                                        <li><p class="item">C: 1991</p></li>
+                                        <li><p class="item">D: 1976</p></li>
+                                    </ul>
+                                    <div class="bottom-part">
+                                        <div class="points">
+                                            Points: 45
+                                            <span class="points-added">+24</span>
+                                        </div>
+                                        <button class="main-btn">
+                                            Next
+                                            <img src="images/arrow-right.svg" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class="count-question">
+                                        <p><span>1</span>/10</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Step 3 -->
+                            <div class="quiz-box box-shadow">
+                                <div class="quiz-result">
+                                    <h2 class="title">Not Bad result</h2>
+                                    <ul class="quiz-result_list">
+                                        <li>
+                                            Your result: <span>340</span> points
+                                        </li>
+                                        <li>
+                                            Your global ranking: <span>22</span>
+                                        </li>
+                                        <li>
+                                            Your rank for a single game: <span>45</span>
+                                        </li>
+                                    </ul>
+                                    <div class="btn-container center">
+                                        <button class="main-btn">Start new Game</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <aside class="right-part">
+                            <div class="best-players box-shadow">
+                                <h3 class="title">Best Players 🏆</h3>
+                                <ul class="user-list">
+                                    <li>
+                                        <div class="user-box">
+                                            <div class="user-img">
+                                                <img src="images/user-img.jpg" alt="user-img">
+                                            </div>
+                                            <div class="user-info">
+                                                <p class="user-name" title="Evano #7854">Evano #7854</p>
+                                                <p class="user-result"><span>456</span> points</p>
+                                            </div>
+                                        </div> 
+                                    </li>
+                                    <li>
+                                        <div class="user-box">
+                                            <div class="user-img">
+                                                <span>E</span>
+                                            </div>
+                                            <div class="user-info">
+                                                <p class="user-name" title="Evano #7854">Evano #7854</p>
+                                                <p class="user-result"><span>456</span> points</p>
+                                            </div>
+                                        </div> 
+                                    </li>
+                                    <li>
+                                        <div class="user-box">
+                                            <div class="user-img">
+                                                <img src="images/user-img.jpg" alt="user-img">
+                                            </div>
+                                            <div class="user-info">
+                                                <p class="user-name" title="Evano #7854">Evano #7854</p>
+                                                <p class="user-result"><span>456</span> points</p>
+                                            </div>
+                                        </div> 
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="best-result box-shadow">
+                                <h3 class="title">Best Result 🚀</h3>
+                                <ul class="user-list">
+                                    <li>
+                                        <div class="user-box">
+                                            <div class="user-img">
+                                                <img src="images/user-img.jpg" alt="user-img">
+                                            </div>
+                                            <div class="user-info">
+                                                <p class="user-name" title="Evano #7854">Evano #7854</p>
+                                                <p class="user-result"><span>456</span> points</p>
+                                            </div>
+                                        </div> 
+                                    </li>
+                                    <li>
+                                        <div class="user-box">
+                                            <div class="user-img">
+                                                <img src="images/user-img.jpg" alt="user-img">
+                                            </div>
+                                            <div class="user-info">
+                                                <p class="user-name" title="Evano #7854">Evano #7854</p>
+                                                <p class="user-result"><span>456</span> points</p>
+                                            </div>
+                                        </div> 
+                                    </li>
+                                    <li>
+                                        <div class="user-box">
+                                            <div class="user-img">
+                                                <img src="images/user-img.jpg" alt="user-img">
+                                            </div>
+                                            <div class="user-info">
+                                                <p class="user-name" title="Evano #7854">Evano #7854</p>
+                                                <p class="user-result"><span>456</span> points</p>
+                                            </div>
+                                        </div> 
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="latest-results box-shadow">
+                                <h3 class="title">Latest Results ⌛</h3>
+                                <ul class="user-list">
+                                    <li>
+                                        <div class="user-box">
+                                            <div class="user-img">
+                                                <img src="images/user-img.jpg" alt="user-img">
+                                            </div>
+                                            <div class="user-info">
+                                                <p class="user-name" title="Evano #7854">Evano #7854</p>
+                                                <p class="user-result"><span>456</span> points</p>
+                                            </div>
+                                        </div> 
+                                    </li>
+                                    <li>
+                                        <div class="user-box">
+                                            <div class="user-img">
+                                                <img src="images/user-img.jpg" alt="user-img">
+                                            </div>
+                                            <div class="user-info">
+                                                <p class="user-name" title="Evano #7854">Evano #7854</p>
+                                                <p class="user-result"><span>456</span> points</p>
+                                            </div>
+                                        </div> 
+                                    </li>
+                                    <li>
+                                        <div class="user-box">
+                                            <div class="user-img">
+                                                <img src="images/user-img.jpg" alt="user-img">
+                                            </div>
+                                            <div class="user-info">
+                                                <p class="user-name" title="Evano #7854">Evano #7854</p>
+                                                <p class="user-result"><span>456</span> points</p>
+                                            </div>
+                                        </div> 
+                                    </li>
+                                </ul>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <!-- Footer -->
-        <footer>
-            footer
+        <footer class="footer">
+            <div class="container">
+                footer
+            </div>
         </footer>
 
         <div class="popups"></div>
