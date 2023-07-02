@@ -408,6 +408,12 @@ button {
   font-size: 20px;
   line-height: 1.25em;
 }
+.quiz-box .quiz-result .title span {
+    display: initial;
+    margin: 0;
+    color: #4067EC;
+    margin-left: 10px;
+}
 
 /* Answears Box */
 .answears-box {
@@ -573,5 +579,21 @@ button {
 
 /* Footer */
 .footer {
-  padding: 40px 0;
+  padding: 30px 0;
+  border-top: 1px solid #e0e0e0;
+}
+.footer .inner {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.footer .link {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.5em;
+    color: #4067EC;
+}
+.footer .link:hover {
+    color: #212121;
 }

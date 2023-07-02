@@ -37,7 +37,7 @@ export const layoutLoginPopup = `
                     <label for="loginCheckbox">Remember Me</label>
                     <span class="checkmark"></span>
                 </div>
-                <button class="submit-btn" type="submit">send</button>
+                <button class="submit-btn" id="submit-btn_login" type="submit">send</button>
             </form>
             <div class="close-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
@@ -94,7 +94,7 @@ export const layoutSignupPopup = `
                             Policy</a>.</label>
                     <span class="checkmark"></span>
                 </div>
-                <button class="submit-btn" type="submit">CREATE AN ACCOUNT</button>
+                <button class="submit-btn" id="submit-btn_signup" type="submit">CREATE AN ACCOUNT</button>
             </form>
             <div class="close-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
