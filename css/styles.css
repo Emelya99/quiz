@@ -357,7 +357,7 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 400px;
+  min-height: 450px;
   padding: 40px;
 }
 .quiz-box .title {
@@ -389,16 +389,25 @@ button {
   color: #212121;
 }
 .quiz-box .points-added {
-    position: absolute;
-    top: 50%;
-    right: -30px;
-    transform: translateY(-50%);
-    font-weight: 700;
-    font-size: 20px;
-    color: green;
+  position: absolute;
+  top: 50%;
+  right: -30px;
+  transform: translateY(-50%);
+  font-weight: 700;
+  font-size: 20px;
+}
+.quiz-box .points-added.plus {
+  color: green;
+}
+.quiz-box .points-added.minus {
+  color: red;
 }
 .quiz-box .quiz-question .main-btn {
   max-width: 200px;
+}
+.quiz-box .quiz-question .main-btn.disabled {
+  pointer-events: none;
+  background: #BDBDBD;
 }
 .quiz-box .count-question {
   position: absolute;
@@ -409,10 +418,10 @@ button {
   line-height: 1.25em;
 }
 .quiz-box .quiz-result .title span {
-    display: initial;
-    margin: 0;
-    color: #4067EC;
-    margin-left: 10px;
+  display: initial;
+  margin: 0;
+  color: #4067ec;
+  margin-left: 10px;
 }
 
 /* Answears Box */
@@ -454,24 +463,24 @@ button {
 
 /* Quiz Result List */
 .quiz-result_list {
-    display: flex;
-    flex-wrap: wrap;
-    width: calc(100% + 20px);
-    margin: -10px;
-    margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  width: calc(100% + 20px);
+  margin: -10px;
+  margin-bottom: 30px;
 }
 .quiz-result_list li {
-    width: 100%;
-    padding: 10px;
-    text-align: center;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 1.5em;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.5em;
 }
 .quiz-result_list li span {
-    font-weight: 700;
-    font-size: 22px;
-    color: #4067EC;
+  font-weight: 700;
+  font-size: 22px;
+  color: #4067ec;
 }
 
 /* User List */
@@ -496,17 +505,17 @@ button {
   height: 60px;
 }
 .user-box .user-img span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 24px;
-    color: #212121;
-    background: #E0E0E0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  color: #212121;
+  background: #e0e0e0;
 }
 .user-box .user-img img {
   border-radius: 50%;
@@ -583,17 +592,17 @@ button {
   border-top: 1px solid #e0e0e0;
 }
 .footer .inner {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 .footer .link {
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 1.5em;
-    color: #4067EC;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.5em;
+  color: #4067ec;
 }
 .footer .link:hover {
-    color: #212121;
+  color: #212121;
 }
