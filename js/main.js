@@ -75,13 +75,13 @@ const plusPointsVisible = (changePoints) => {
 
 const answearHandler = (e, trueAnswear, answearsList) => {
   const nextQuestionBtn = gameContainer.querySelector("#next-question-btn");
-  let changePoints = 16;
-  plusPointsVisible(changePoints);
+  let changePoints = 0;
   let item = e.target;
   let userAnswear = item.attributes.answear.value;
 
   if (userAnswear == trueAnswear) {
     score += 1;
+    changePoints += 10;
     item.classList.add("true");
   } else {
     let trueAnswearItem = gameContainer.querySelector(`[answear="${trueAnswear}"]`);
@@ -89,6 +89,7 @@ const answearHandler = (e, trueAnswear, answearsList) => {
     item.classList.add("false");
   }
   
+  plusPointsVisible(changePoints);
   nextQuestionBtn.classList.remove('disabled');
   nextQuestionBtn.addEventListener("click", nextQuestion);
 
@@ -97,6 +98,14 @@ const answearHandler = (e, trueAnswear, answearsList) => {
   });
 };
 
+const startQuizAgain = () => {
+  const startAgainBtn = gameContainer.querySelector('#start-quiz-again');
+  step = 0;
+  points = 0;
+  score = 0;
+  startAgainBtn.addEventListener("click", startQuiz);
+}
+
 const startQuiz = () => {
   let question = questions[step];
 
@@ -104,6 +113,7 @@ const startQuiz = () => {
     gameContainer.replaceChildren();
     let resultHtmlLayout = renderResultQuiz(points, score);
     gameContainer.insertAdjacentHTML("beforeend", resultHtmlLayout);
+    startQuizAgain();
     return;
   }
 

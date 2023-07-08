@@ -61,7 +61,7 @@ export const renderResultQuiz = (points, score) => {
             </li>
         </ul>
         <div class="btn-container center">
-            <button class="main-btn">Start new Game</button>
+            <button class="main-btn" id="start-quiz-again">Start new Game</button>
         </div>
     </div>
     `;

@@ -400,6 +400,7 @@ button {
   color: green;
 }
 .quiz-box .points-added.minus {
+  right: -10px;
   color: red;
 }
 .quiz-box .quiz-question .main-btn {
