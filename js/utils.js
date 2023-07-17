@@ -1,32 +1,66 @@
+export const requestLayoutToBase = (path) => {
+  const response = firebase.database().ref(path).once("value");
+  const data = response.val();
+  return data;
+};
+
+export const renderSidebarElements = (obj) => {
+  let arrLayouts = '';
+  obj.data.map(item => {
+    let firstTitleLetter = item.name.slice(0,1);
+    let content = `
+      <li>
+        <div class="user-box">
+          <div class="user-img">
+              <span>${firstTitleLetter}</span>
+          </div>
+          <div class="user-info">
+            <p class="user-name" title="${item.name}">${item.name} #7854</p>
+            <p class="user-result"><span>${item.points}</span> points</p>
+          </div>
+        </div>
+      </li>`;
+    arrLayouts += content;
+  })
+  let sidebarElementHtmlLayout = `
+  <div class="${obj.info.class} box-shadow">
+    <h3 class="title">${obj.info.title}</h3>
+    <ul class="user-list">
+      ${arrLayouts}
+    </ul>
+  </div>
+  `;
+  return sidebarElementHtmlLayout;
+};
+
 export const renredQuestion = (obj, step, points) => {
   let questionsHtmlLayout = `
-  <div class="quiz-question">
-  <h2 class="title">${obj.question}</h2>
-  <ul class="answears-box">
-      <li><p class="item" answear="0">A: ${obj.options[0]}</p></li>
-      <li><p class="item" answear="1">B: ${obj.options[1]}</p></li>
-      <li><p class="item" answear="2">C: ${obj.options[2]}</p></li>
-      <li><p class="item" answear="3">D: ${obj.options[3]}</p></li>
-  </ul>
-  <div class="bottom-part">
-      <div class="points">
+    <div class="quiz-question">
+      <h2 class="title">${obj.question}</h2>
+      <ul class="answears-box">
+        <li><p class="item" answear="0">A: ${obj.options[0]}</p></li>
+        <li><p class="item" answear="1">B: ${obj.options[1]}</p></li>
+        <li><p class="item" answear="2">C: ${obj.options[2]}</p></li>
+        <li><p class="item" answear="3">D: ${obj.options[3]}</p></li>
+      </ul>
+      <div class="bottom-part">
+        <div class="points">
           Points: ${points}
+        </div>
+        <button class="main-btn disabled" id="next-question-btn">
+          Next <img src="images/arrow-right.svg" alt="icon">
+        </button>
       </div>
-      <button class="main-btn disabled" id="next-question-btn">
-          Next
-          <img src="images/arrow-right.svg" alt="icon">
-      </button>
-  </div>
-  <div class="count-question">
-      <p><span>${step + 1}</span>/10</p>
-  </div>
-</div>
+      <div class="count-question">
+        <p><span>${step + 1}</span>/10</p>
+      </div>
+    </div>
   `;
   return questionsHtmlLayout;
 };
 
 export const renderResultQuiz = (points, score) => {
-  let successMessage = '';
+  let successMessage = "";
 
   if (score === 10) {
     successMessage = "Congratulations! You answered all questions correctly!";

@@ -335,17 +335,17 @@ button {
   width: calc(100% - 330px);
   padding-right: 40px;
 }
-.quiz .right-part {
+.quiz .sidebar {
   width: 330px;
 }
-.quiz .right-part > div {
+.quiz .sidebar > div {
   padding: 20px;
 }
 .quiz .inner > div > div:not(:last-child),
 .quiz .inner > aside > div:not(:last-child) {
   margin-bottom: 40px;
 }
-.quiz .right-part .title {
+.quiz .sidebar .title {
   margin-bottom: 15px;
   font-size: 20px;
   text-align: center;
@@ -391,7 +391,7 @@ button {
 .quiz-box .points-added {
   position: absolute;
   top: 50%;
-  right: -30px;
+  right: -40px;
   transform: translateY(-50%);
   font-weight: 700;
   font-size: 20px;
@@ -400,7 +400,6 @@ button {
   color: green;
 }
 .quiz-box .points-added.minus {
-  right: -10px;
   color: red;
 }
 .quiz-box .quiz-question .main-btn {

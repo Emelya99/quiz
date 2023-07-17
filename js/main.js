@@ -1,15 +1,38 @@
 import { layoutLoginPopup, layoutSignupPopup } from "./storage.js";
-import { renredQuestion, renderResultQuiz } from "./utils.js";
+import { renredQuestion, renderResultQuiz, renderSidebarElements, requestLayoutToBase } from "./utils.js";
 import { database } from "./firebase.js";
 
-/* Header Buttons */
-const popupsPoint = document.querySelector(".popups");
-
-/* Header Buttons */
-const header = document.querySelector(".header");
+/* Header */
+const header = document.querySelector("#header");
 const loginBtn = header.querySelector("#login-btn");
 const signupBtn = header.querySelector("#signup-btn");
 // const signoutBtn = header.querySelector('#signout-btn');
+
+/* Sidebar */
+const sidebar = document.querySelector('#sidebar');
+
+/* Popups */
+const popupsPoint = document.querySelector(".popups");
+
+/* Render Sidebar Content Logic */
+const readData = async () => {
+  try {
+    const response = await firebase.database().ref('/sidebar-info').once('value');
+    const data = response.val();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+readData()
+  .then(data => {
+    const obj = data.bestPlayers;
+    const sidebarLayout = renderSidebarElements(obj);
+    sidebar.insertAdjacentHTML("beforeend", sidebarLayout);
+  })
+  .catch(error => console.log(error));
+
 
 const renderPopupProperties = () => {
   const popupContainer = document.querySelector(".popup");
@@ -43,11 +66,12 @@ signupBtn.addEventListener("click", () => {
 });
 
 /* Game Variables */
-const gameContainer = document.querySelector(".quiz-box");
+const gameContainer = document.querySelector("#quiz-box_container");
 const startQuizBtn = gameContainer.querySelector("#start-quiz-btn");
 let step = 0;
 let points = 0;
 let score = 0;
+let currentAnswearsInRow = 0;
 let questions = [];
 
 const nextQuestion = () => {
@@ -80,16 +104,22 @@ const answearHandler = (e, trueAnswear, answearsList) => {
   let changePoints = 0;
   let item = e.target;
   let userAnswear = item.attributes.answear.value;
-
+  
   if (userAnswear == trueAnswear) {
+    currentAnswearsInRow += 1;
+    let threeAnswearsInRow = currentAnswearsInRow >= 3 ? currentAnswearsInRow * 2 : 0;
+    let fiveAnswearsInRow = currentAnswearsInRow >= 5 ? currentAnswearsInRow * 4 : 0;
+    let sevenAnswearsInRow = currentAnswearsInRow >= 7 ? currentAnswearsInRow * 6 : 0;
+    let tenAnswearsInRow = currentAnswearsInRow >= 10 ? currentAnswearsInRow * 10 : 0;
     score += 1;
-    changePoints += 10;
+    changePoints += 5 + (currentAnswearsInRow * 5) + threeAnswearsInRow + fiveAnswearsInRow + sevenAnswearsInRow + tenAnswearsInRow;
     item.classList.add("true");
   } else {
     let trueAnswearItem = gameContainer.querySelector(
       `[answear="${trueAnswear}"]`
     );
-    changePoints += -5;
+    currentAnswearsInRow = 0;
+    changePoints += -10;
     trueAnswearItem.classList.add("true");
     item.classList.add("false");
   }
@@ -108,6 +138,7 @@ const startQuizAgain = () => {
   step = 0;
   points = 0;
   score = 0;
+  currentAnswearsInRow = 0;
   questions = [];
   startAgainBtn.addEventListener("click", startQuiz);
 };
@@ -116,10 +147,10 @@ const getQuestions = async () => {
   gameContainer.replaceChildren();
   gameContainer.insertAdjacentHTML("beforeend", `<div class="loader"><div></div><div></div><div></div></div>`);
   try {
-    const snapshot = await firebase.database().ref("/").once("value");
-    const data = snapshot.val();
-    const arr = data.sort(() => Math.random() - 0.5).splice(0, 10);
-    return arr;
+    const response = await firebase.database().ref("/quiz").once("value");
+    const data = response.val();
+    const sortedArr = data.sort(() => Math.random() - 0.5).splice(0, 10);
+    return sortedArr;
   } catch (error) {
     console.error(error);
   }
