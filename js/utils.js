@@ -15,19 +15,21 @@ export const renderSidebarElements = (obj) => {
               <span>${firstTitleLetter}</span>
           </div>
           <div class="user-info">
-            <p class="user-name" title="${item.name}">${item.name} #7854</p>
-            <p class="user-result"><span>${item.points}</span> points</p>
+            <p class="user-name" title="${item.name} #7854">${item.name} #7854</p>
+            <p class="user-result" title="${item.points} points"><span>${item.points}</span> points</p>
           </div>
         </div>
       </li>`;
     arrLayouts += content;
   })
   let sidebarElementHtmlLayout = `
-  <div class="${obj.info.class} box-shadow">
-    <h3 class="title">${obj.info.title}</h3>
-    <ul class="user-list">
-      ${arrLayouts}
-    </ul>
+  <div class="item">
+    <div class="sidebar-box ${obj.info.class} box-shadow">
+      <h3 class="title">${obj.info.title}</h3>
+      <ul class="user-list">
+        ${arrLayouts}
+      </ul>
+    </div>
   </div>
   `;
   return sidebarElementHtmlLayout;

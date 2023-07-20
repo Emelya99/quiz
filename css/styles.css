@@ -101,6 +101,16 @@ button {
   color: #fff;
   background: #212121;
 }
+@media(max-width: 640px) {
+  .auth-btn {
+    padding: 0;
+    border: none;
+  }
+  .auth-btn:hover {
+    color: #4067ec;
+    background: none;
+  }
+}
 .submit-btn {
   width: 100%;
   padding: 18px 30px;
@@ -122,7 +132,7 @@ button {
   justify-content: center;
   max-width: 320px;
   width: 100%;
-  padding: 15px 60px;
+  padding: 15px;
   border-radius: 10px;
   font-weight: 700;
   font-size: 18px;
@@ -157,6 +167,7 @@ button {
 }
 .header .inner {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
 }
@@ -183,6 +194,38 @@ button {
 }
 .header .user-profile .name span {
   color: #4067ec;
+}
+
+@media(max-width: 767px) {
+  .header {
+    padding: 10px 0;
+  }
+  .header .logo {
+    width: 200px;
+    height: 34px;
+  }
+}
+
+@media(max-width: 550px) {
+  .header .user-profile {
+    order: 2;
+    width: 100%;
+    margin: 10px 0 0;
+    text-align: right;
+  }
+  .header .user-profile .name {
+    font-size: 16px;
+  }
+}
+
+@media(max-width: 420px) {
+  .header .logo {
+    width: 162px;
+    height: 32px;
+  }
+  .header .auth-btns > li:not(:last-child) {
+    margin-right: 15px;
+  }
 }
 
 /* Popups */
@@ -338,17 +381,60 @@ button {
 .quiz .sidebar {
   width: 330px;
 }
-.quiz .sidebar > div {
-  padding: 20px;
-}
-.quiz .inner > div > div:not(:last-child),
-.quiz .inner > aside > div:not(:last-child) {
+.quiz .sidebar .item:not(:last-child) {
   margin-bottom: 40px;
 }
-.quiz .sidebar .title {
+.quiz .sidebar-box {
+  padding: 20px;
+}
+.quiz .sidebar-box .title {
   margin-bottom: 15px;
   font-size: 20px;
   text-align: center;
+}
+
+@media(max-width: 1200px) {
+  .quiz .left-part {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 40px;
+  }
+  .quiz .sidebar {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: calc(100% + 20px);
+    margin: -10px;
+  }
+  .quiz aside > .item {
+    width: 33.33%;
+    padding: 10px;
+  }
+  .quiz .sidebar .item:not(:last-child) {
+    margin-bottom: 0;
+  }
+}
+
+@media(max-width: 1024px) {
+  .quiz {
+    padding: 60px 0;
+  }
+}
+
+@media(max-width: 767px) {
+  .quiz aside > .item {
+    width: 50%;
+  }
+}
+
+@media(max-width: 510px) {
+  .quiz .left-part {
+    margin-bottom: 20px;
+  }
+  .quiz aside > .item {
+    width: 100%;
+  }
 }
 
 /* Quiz Box */
@@ -424,6 +510,54 @@ button {
   margin-left: 10px;
 }
 
+@media(max-width: 1024px) {
+  .quiz-box {
+    min-height: 400px;
+  }
+  .quiz-box .title {
+    font-size: 20px;
+  }
+}
+
+@media(max-width: 767px) {
+  .quiz-box {
+    min-height: 350px;
+    padding: 20px;
+  }
+}
+
+@media(max-width: 640px) {
+  .quiz-box {
+    padding: 40px 20px 40px;
+    min-height: 550px;
+  }
+  .quiz-box .count-question {
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+  }
+  .quiz-box .quiz-result .title span {
+    margin: 0;
+  }
+}
+
+@media(max-width: 475px) {
+  .quiz-box .points {
+    order: 2;
+    width: 100%;
+    padding: 0;
+    font-size: 18px;
+  }
+  .quiz-box .points-added {
+    right: 0;
+    font-size: 18px;
+  }
+  .quiz-box .quiz-question .main-btn {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
 /* Answears Box */
 .answears-box {
   display: flex;
@@ -461,6 +595,29 @@ button {
   background: #fafafa;
 }
 
+@media(max-width: 767px) {
+  .answears-box .item {
+    font-size: 16px;
+  }
+}
+
+@media(max-width: 640px) {
+  .answears-box {
+    width: calc(100% + 10px);
+    margin: -5px;
+    margin-bottom: 20px;
+  }
+  .quiz-box .quiz-question .title {
+    max-width: initial;
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+  .answears-box li {
+    width: 100%;
+    padding: 5px;
+  }
+}
+
 /* Quiz Result List */
 .quiz-result_list {
   display: flex;
@@ -481,6 +638,15 @@ button {
   font-weight: 700;
   font-size: 22px;
   color: #4067ec;
+}
+
+@media(max-width: 640px) {
+  .quiz-result_list li {
+    font-size: 16px;
+  }
+  .quiz-result_list li span {
+    font-size: 18px;
+  }
 }
 
 /* User List */
@@ -537,12 +703,26 @@ button {
   color: #212121;
 }
 .user-box .user-result {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 14px;
   line-height: 1.25em;
   color: #4067ec;
 }
 .user-box .user-result span {
   font-weight: 700;
+}
+
+@media(max-width: 1024px) {
+  .user-box .user-img {
+    width: 50px;
+    height: 50px;
+  }
+  .user-box .user-info {
+    width: calc(100% - 50px);
+    padding-left: 10px;
+  }
 }
 
 /* Loader */
@@ -605,4 +785,18 @@ button {
 }
 .footer .link:hover {
   color: #212121;
+}
+
+@media(max-width: 475px) {
+  .footer .inner {
+    justify-content: center;
+  }
+  .footer .link {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .footer .copyright {
+    text-align: center;
+  }
 }

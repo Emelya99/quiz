@@ -15,7 +15,7 @@ const sidebar = document.querySelector('#sidebar');
 const popupsPoint = document.querySelector(".popups");
 
 /* Render Sidebar Content Logic */
-const readData = async () => {
+const requestToSidebarContent = async () => {
   try {
     const response = await firebase.database().ref('/sidebar-info').once('value');
     const data = response.val();
@@ -25,11 +25,17 @@ const readData = async () => {
     throw error;
   }
 }
-readData()
+requestToSidebarContent()
   .then(data => {
-    const obj = data.bestPlayers;
-    const sidebarLayout = renderSidebarElements(obj);
-    sidebar.insertAdjacentHTML("beforeend", sidebarLayout);
+    const bestPlayers = data.bestPlayers;
+    const bestResult = data.bestResult;
+    const latestResults = data.latestResults;
+    const bestPlayersLayout = renderSidebarElements(bestPlayers);
+    const bestResultsLayout = renderSidebarElements(bestResult);
+    const latestResultsLayout = renderSidebarElements(latestResults);
+    sidebar.insertAdjacentHTML("beforeend", bestPlayersLayout);
+    sidebar.insertAdjacentHTML("beforeend", bestResultsLayout);
+    sidebar.insertAdjacentHTML("beforeend", latestResultsLayout);
   })
   .catch(error => console.log(error));
 
