@@ -4,6 +4,29 @@ export const requestLayoutToBase = (path) => {
   return data;
 };
 
+export const renderHeaderLayout = (user) => {
+  const renderHeaderLayoutContent = `
+  <div class="container">
+    <div class="inner">
+      <a href="#" class="logo">
+        <img src="images/logo.svg" alt="logo">
+      </a>
+      <div class="user-profile">
+        <p class="name" title="${user.uid}">Hello,
+          <span>${user.displayName ? user.displayName : user.email} #${user.uid.substring(0, 4)}</span>👋
+        </p>
+      </div>
+      <ul class="auth-btns">
+      <li>
+        <button class="auth-btn" id="signout-btn">Signout</button>
+      </li>
+      </ul>
+    </div>
+  </div>
+  `
+  return renderHeaderLayoutContent;
+}
+
 export const renderSidebarElements = (obj) => {
   let arrLayouts = '';
   obj.data.map(item => {

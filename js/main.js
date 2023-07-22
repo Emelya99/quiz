@@ -1,11 +1,9 @@
-import { layoutLoginPopup, layoutSignupPopup } from "./storage.js";
-import { renredQuestion, renderResultQuiz, renderSidebarElements, requestLayoutToBase } from "./utils.js";
+import { layoutLoginPopup, layoutSignupPopup, headerGuestLayout } from "./storage.js";
+import { renredQuestion, renderResultQuiz, renderSidebarElements, renderHeaderLayout } from "./utils.js";
 import { database } from "./firebase.js";
 
 /* Header */
 const header = document.querySelector("#header");
-const loginBtn = header.querySelector("#login-btn");
-const signupBtn = header.querySelector("#signup-btn");
 // const signoutBtn = header.querySelector('#signout-btn');
 
 /* Sidebar */
@@ -13,6 +11,22 @@ const sidebar = document.querySelector('#sidebar');
 
 /* Popups */
 const popupsPoint = document.querySelector(".popups");
+
+/* Header Render */
+const headerRender = (user) => {
+  header.replaceChildren();
+
+  if(user) {
+    const headerLayout = renderHeaderLayout(user);
+    header.insertAdjacentHTML("beforeend", headerLayout);
+  } else {
+    const headerLayout = headerGuestLayout;
+    header.insertAdjacentHTML("beforeend", headerLayout);
+  }
+}
+headerRender();
+const loginBtn = header.querySelector("#login-btn");
+const signupBtn = header.querySelector("#signup-btn");
 
 /* Render Sidebar Content Logic */
 const requestToSidebarContent = async () => {
@@ -40,12 +54,33 @@ requestToSidebarContent()
   .catch(error => console.log(error));
 
 
+const authLoginLogic = (event) => {
+  event.preventDefault();
+
+  const email = event.target.querySelector('#email').value;
+  const password = event.target.querySelector('#password').value;
+
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Пользователь успешно вошел в систему
+      const user = userCredential.user;
+      headerRender(user);
+      popupsPoint.replaceChildren();
+    })
+    .catch((error) => {
+      // Обработка ошибок при входе
+      console.error('Ошибка при входе:', error.message);
+    });
+}  
+
 const renderPopupProperties = () => {
   const popupContainer = document.querySelector(".popup");
   const closePopupBtn = popupContainer.querySelector(".close-btn");
   const closeOverlay = popupContainer.querySelector(".overlay");
   const passwordInput = popupContainer.querySelector(".password-input");
   const passwordVisibleBtn = popupContainer.querySelector(".views-password");
+  const loginForm = popupContainer.querySelector('#login-form');
+  // const signupForm = popupContainer.querySelector('#signup-form');
 
   passwordVisibleBtn.addEventListener("click", () => {
     passwordInput.type === "text"
@@ -54,6 +89,7 @@ const renderPopupProperties = () => {
     passwordInput.focus();
   });
 
+  loginForm.addEventListener('submit', authLoginLogic);
   closePopupBtn.addEventListener("click", () => {
     popupsPoint.replaceChildren();
   });

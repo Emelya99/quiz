@@ -1,17 +1,35 @@
+export const headerGuestLayout = `
+<div class="container">
+    <div class="inner">
+      <a href="#" class="logo">
+        <img src="images/logo.svg" alt="logo">
+      </a>
+      <ul class="auth-btns">
+        <li>
+            <button class="auth-btn" id="login-btn">Login</button>
+        </li>
+        <li>
+            <button class="auth-btn" id="signup-btn">Signup</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+`
+
 export const layoutLoginPopup = `
 <div class="popup popup_login">
         <div class="content">
             <h2 class="title">Log In to BTH</h2>
             <p class="subtitle">Dive into the World of Brain Teasers!</p>
-            <form action="#">
+            <form id="login-form">
                 <div class="input-box">
                     <span class="input-title">EMAIL ADRRESS</span>
-                    <input class="default-input" type="email" placeholder="Enter Email Adrress" autocomplete="off"
+                    <input class="default-input" type="email" id="email" placeholder="Enter Email Adrress" autocomplete="off"
                         required>
                 </div>
                 <div class="input-box">
                     <span class="input-title">PASSWORD</span>
-                    <input class="default-input password-input" type="password" placeholder="Enter Password" autocomplete="off"
+                    <input class="default-input password-input" type="password" id="password" placeholder="Enter Password" autocomplete="off"
                         required>
                     <div class="views-password">
                         <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -55,19 +73,19 @@ export const layoutSignupPopup = `
         <div class="content">
             <h2 class="title">Sign up to BTH</h2>
             <p class="subtitle">Dive into the World of Brain Teasers!</p>
-            <form action="#">
+            <form id="signup-form">
                 <div class="input-box">
                     <span class="input-title">FIRST NAME</span>
-                    <input class="default-input" type="text" placeholder="Enter First Name" autocomplete="off" required>
+                    <input class="default-input" type="text" id="firstName" placeholder="Enter First Name" autocomplete="off" required>
                 </div>
                 <div class="input-box">
                     <span class="input-title">EMAIL ADRRESS</span>
-                    <input class="default-input" type="email" placeholder="Enter Email Adrress" autocomplete="off"
+                    <input class="default-input" type="email" id="email" placeholder="Enter Email Adrress" autocomplete="off"
                         required>
                 </div>
                 <div class="input-box">
                     <span class="input-title">PASSWORD</span>
-                    <input class="default-input password-input" type="password" placeholder="Enter Password" autocomplete="off"
+                    <input class="default-input password-input" type="password" id="password" placeholder="Enter Password" autocomplete="off"
                         required>
                     <div class="views-password">
                         <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
