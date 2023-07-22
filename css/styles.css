@@ -41,6 +41,12 @@ button {
   color: #757575;
   background: #fff;
 }
+@media(max-width: 767px) {
+  .default-input {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
 input:focus {
   border: 1px solid #212121;
 }
@@ -125,6 +131,11 @@ button {
 .submit-btn:hover {
   color: #212121;
   background: #fff;
+}
+@media(max-width: 767px) {
+  .submit-btn {
+    padding: 10px;
+  }
 }
 .main-btn {
   display: flex;
@@ -363,6 +374,28 @@ button {
 }
 .popup .checkbox-container input:checked ~ .checkmark:after {
   display: block;
+}
+
+@media(max-width: 1024px) {
+  .popup .content {
+    max-width: 450px;
+    padding: 60px 40px;
+  }
+}
+
+@media(max-width: 767px) {
+  .popup {
+    padding: 15px;
+  }
+  .popup .content {
+    padding: 30px 15px;
+  }
+  .popup .title {
+    font-size: 24px;
+  }
+  .popup .input-title {
+    left: 10px;
+  }
 }
 
 /* Quiz Section */

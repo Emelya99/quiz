@@ -4,8 +4,8 @@ import { database } from "./firebase.js";
 
 /* Header */
 const header = document.querySelector("#header");
-// const loginBtn = header.querySelector("#login-btn");
-// const signupBtn = header.querySelector("#signup-btn");
+const loginBtn = header.querySelector("#login-btn");
+const signupBtn = header.querySelector("#signup-btn");
 // const signoutBtn = header.querySelector('#signout-btn');
 
 /* Sidebar */
@@ -62,14 +62,14 @@ const renderPopupProperties = () => {
   });
 };
 
-// loginBtn.addEventListener("click", () => {
-//   popupsPoint.insertAdjacentHTML("beforeend", layoutLoginPopup);
-//   renderPopupProperties();
-// });
-// signupBtn.addEventListener("click", () => {
-//   popupsPoint.insertAdjacentHTML("beforeend", layoutSignupPopup);
-//   renderPopupProperties();
-// });
+loginBtn.addEventListener("click", () => {
+  popupsPoint.insertAdjacentHTML("beforeend", layoutLoginPopup);
+  renderPopupProperties();
+});
+signupBtn.addEventListener("click", () => {
+  popupsPoint.insertAdjacentHTML("beforeend", layoutSignupPopup);
+  renderPopupProperties();
+});
 
 /* Game Variables */
 const gameContainer = document.querySelector("#quiz-box_container");
