@@ -133,6 +133,7 @@ const answearHandler = (e, trueAnswear, answearsList) => {
   plusPointsVisible(changePoints);
   nextQuestionBtn.classList.remove("disabled");
   nextQuestionBtn.addEventListener("click", nextQuestion);
+  nextQuestionBtn.addEventListener("touchstart", nextQuestion);
 
   answearsList.forEach((item) => {
     item.style.pointerEvents = "none";
@@ -147,6 +148,7 @@ const startQuizAgain = () => {
   currentAnswearsInRow = 0;
   questions = [];
   startAgainBtn.addEventListener("click", startQuiz);
+  startAgainBtn.addEventListener("touchstart", startQuiz);
 };
 
 const getQuestions = async () => {
@@ -188,7 +190,11 @@ const startQuiz = async () => {
     item.addEventListener("click", function (e) {
       answearHandler(e, question.answer, answearsList);
     });
+    item.addEventListener("touchstart", function (e) {
+      answearHandler(e, question.answer, answearsList);
+    });
   });
 };
 
 startQuizBtn.addEventListener("click", startQuiz);
+startQuizBtn.addEventListener("touchstart", startQuiz);
