@@ -71,6 +71,7 @@ const authLoginLogic = (event) => {
 
   const email = event.target.querySelector('#email').value;
   const password = event.target.querySelector('#password').value;
+  const errorBox = event.target.querySelector('#error');
 
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
@@ -79,7 +80,7 @@ const authLoginLogic = (event) => {
       popupsPoint.replaceChildren();
     })
     .catch((error) => {
-      console.error('Ошибка при входе:', error.message);
+      errorBox.innerHTML = error.message;
     });
 }
 
@@ -89,6 +90,7 @@ const authSignupLogic = (event) => {
   const name = event.target.querySelector('#firstName').value;
   const email = event.target.querySelector('#email').value;
   const password = event.target.querySelector('#password').value;
+  const errorBox = event.target.querySelector('#error');
 
   firebase.auth().createUserWithEmailAndPassword(email, password)
   .then((userCredential) => {
@@ -109,9 +111,8 @@ const authSignupLogic = (event) => {
     popupsPoint.replaceChildren();
   })
   .catch((error) => {
-    console.error('Ошибка при регистрации:', error.message);
+    errorBox.innerHTML = error.message;
   });
-
 }
 
 const authSignoutLogic = () => {

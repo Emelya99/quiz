@@ -29,7 +29,7 @@ export const layoutLoginPopup = `
                 </div>
                 <div class="input-box">
                     <span class="input-title">PASSWORD</span>
-                    <input class="default-input password-input" type="password" id="password" placeholder="Enter Password" autocomplete="off"
+                    <input class="default-input password-input" type="password" id="password" min="6" placeholder="Enter Password" autocomplete="off"
                         required>
                     <div class="views-password">
                         <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -56,6 +56,7 @@ export const layoutLoginPopup = `
                     <span class="checkmark"></span>
                 </div>
                 <button class="submit-btn" id="submit-btn_login" type="submit">send</button>
+                <p class="error" id="error"></p>
             </form>
             <div class="close-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
@@ -85,7 +86,7 @@ export const layoutSignupPopup = `
                 </div>
                 <div class="input-box">
                     <span class="input-title">PASSWORD</span>
-                    <input class="default-input password-input" type="password" id="password" placeholder="Enter Password" autocomplete="off"
+                    <input class="default-input password-input" type="password" id="password" min="6" placeholder="Enter Password" autocomplete="off"
                         required>
                     <div class="views-password">
                         <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -113,6 +114,7 @@ export const layoutSignupPopup = `
                     <span class="checkmark"></span>
                 </div>
                 <button class="submit-btn" id="submit-btn_signup" type="submit">CREATE AN ACCOUNT</button>
+                <p class="error" id="error"></p>
             </form>
             <div class="close-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
