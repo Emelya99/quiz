@@ -13,7 +13,7 @@ export const renderHeaderLayout = (user) => {
       </a>
       <div class="user-profile">
         <p class="name" title="${user.uid}">Hello,
-          <span>${user.displayName ? user.displayName : user.email} #${user.uid.substring(0, 4)}</span>👋
+          <span>${user.displayName} #${user.uid.substring(0, 4)}</span>👋
         </p>
       </div>
       <ul class="auth-btns">

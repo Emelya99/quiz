@@ -4,7 +4,6 @@ import { database } from "./firebase.js";
 
 /* Header */
 const header = document.querySelector("#header");
-// const signoutBtn = header.querySelector('#signout-btn');
 
 /* Sidebar */
 const sidebar = document.querySelector('#sidebar');
@@ -19,14 +18,28 @@ const headerRender = (user) => {
   if(user) {
     const headerLayout = renderHeaderLayout(user);
     header.insertAdjacentHTML("beforeend", headerLayout);
+
+    const signoutBtn = header.querySelector('#signout-btn');
+
+    signoutBtn.addEventListener('click', authSignoutLogic)
   } else {
     const headerLayout = headerGuestLayout;
     header.insertAdjacentHTML("beforeend", headerLayout);
+
+    const loginBtn = document.querySelector("#login-btn");
+    const signupBtn = document.querySelector("#signup-btn");
+    
+    loginBtn.addEventListener("click", () => {
+      popupsPoint.insertAdjacentHTML("beforeend", layoutLoginPopup);
+      renderPopupProperties();
+    });
+    signupBtn.addEventListener("click", () => {
+      popupsPoint.insertAdjacentHTML("beforeend", layoutSignupPopup);
+      renderPopupProperties();
+    });
   }
 }
 headerRender();
-const loginBtn = header.querySelector("#login-btn");
-const signupBtn = header.querySelector("#signup-btn");
 
 /* Render Sidebar Content Logic */
 const requestToSidebarContent = async () => {
@@ -53,7 +66,6 @@ requestToSidebarContent()
   })
   .catch(error => console.log(error));
 
-
 const authLoginLogic = (event) => {
   event.preventDefault();
 
@@ -62,25 +74,62 @@ const authLoginLogic = (event) => {
 
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
-      // Пользователь успешно вошел в систему
       const user = userCredential.user;
       headerRender(user);
       popupsPoint.replaceChildren();
     })
     .catch((error) => {
-      // Обработка ошибок при входе
       console.error('Ошибка при входе:', error.message);
     });
-}  
+}
 
-const renderPopupProperties = () => {
+const authSignupLogic = (event) => {
+  event.preventDefault();
+
+  const name = event.target.querySelector('#firstName').value;
+  const email = event.target.querySelector('#email').value;
+  const password = event.target.querySelector('#password').value;
+
+  firebase.auth().createUserWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+    const user = userCredential.user;
+
+    user.updateProfile({
+      displayName: name,
+      photoURL: 0,
+    })
+    .then(() => {
+      console.log('Имя пользователя успешно добавлено в профиль:', name);
+    })
+    .catch((error) => {
+      console.error('Ошибка при добавлении имени пользователя:', error.message);
+    });
+
+    headerRender(user);
+    popupsPoint.replaceChildren();
+  })
+  .catch((error) => {
+    console.error('Ошибка при регистрации:', error.message);
+  });
+
+}
+
+const authSignoutLogic = () => {
+  firebase.auth().signOut()
+  .then(() => {
+    headerRender();
+  })
+  .catch((error) => {
+    console.error('Ошибка при выходе:', error.message);
+  });
+}
+
+const renderPopupProperties = (event) => {
   const popupContainer = document.querySelector(".popup");
   const closePopupBtn = popupContainer.querySelector(".close-btn");
   const closeOverlay = popupContainer.querySelector(".overlay");
   const passwordInput = popupContainer.querySelector(".password-input");
   const passwordVisibleBtn = popupContainer.querySelector(".views-password");
-  const loginForm = popupContainer.querySelector('#login-form');
-  // const signupForm = popupContainer.querySelector('#signup-form');
 
   passwordVisibleBtn.addEventListener("click", () => {
     passwordInput.type === "text"
@@ -89,7 +138,14 @@ const renderPopupProperties = () => {
     passwordInput.focus();
   });
 
-  loginForm.addEventListener('submit', authLoginLogic);
+  if(popupContainer.classList.contains('popup_login')) {
+    const loginForm = popupContainer.querySelector('#login-form');
+    loginForm.addEventListener('submit', authLoginLogic);
+  } else {
+    const signupForm = popupContainer.querySelector('#signup-form');
+    signupForm.addEventListener('submit', authSignupLogic);
+  }
+
   closePopupBtn.addEventListener("click", () => {
     popupsPoint.replaceChildren();
   });
@@ -97,15 +153,6 @@ const renderPopupProperties = () => {
     popupsPoint.replaceChildren();
   });
 };
-
-loginBtn.addEventListener("click", () => {
-  popupsPoint.insertAdjacentHTML("beforeend", layoutLoginPopup);
-  renderPopupProperties();
-});
-signupBtn.addEventListener("click", () => {
-  popupsPoint.insertAdjacentHTML("beforeend", layoutSignupPopup);
-  renderPopupProperties();
-});
 
 /* Game Variables */
 const gameContainer = document.querySelector("#quiz-box_container");
