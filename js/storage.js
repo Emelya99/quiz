@@ -14,7 +14,20 @@ export const headerGuestLayout = `
       </ul>
     </div>
   </div>
-`
+`;
+
+export const quizForGuest = `<h2 class="title">To start the quiz, you need to log in or register.</h2>`;
+
+export const quizForUser = `
+    <h2 class="title">
+        Rules: There are 10 questions with one correct answer each. The more correct answers
+        in a row, the more points. <br>
+        <span>Are you ready?</span>
+    </h2>
+    <div class="btn-container center">
+        <button class="main-btn" id="start-quiz-btn">Start</button>
+    </div>
+`;
 
 export const layoutLoginPopup = `
 <div class="popup popup_login">

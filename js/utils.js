@@ -1,9 +1,3 @@
-export const requestLayoutToBase = (path) => {
-  const response = firebase.database().ref(path).once("value");
-  const data = response.val();
-  return data;
-};
-
 export const renderHeaderLayout = (user) => {
   const renderHeaderLayoutContent = `
   <div class="container">

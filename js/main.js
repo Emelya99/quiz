@@ -1,4 +1,4 @@
-import { layoutLoginPopup, layoutSignupPopup, headerGuestLayout } from "./storage.js";
+import { layoutLoginPopup, layoutSignupPopup, headerGuestLayout, quizForGuest, quizForUser } from "./storage.js";
 import { renredQuestion, renderResultQuiz, renderSidebarElements, renderHeaderLayout } from "./utils.js";
 import { database } from "./firebase.js";
 
@@ -8,156 +8,16 @@ const header = document.querySelector("#header");
 /* Sidebar */
 const sidebar = document.querySelector('#sidebar');
 
+/* Quiz Container */
+const gameContainer = document.querySelector("#quiz-box_container");
+
 /* Popups */
 const popupsPoint = document.querySelector(".popups");
 
-/* Header Render */
-const headerRender = (user) => {
-  header.replaceChildren();
-
-  if(user) {
-    const headerLayout = renderHeaderLayout(user);
-    header.insertAdjacentHTML("beforeend", headerLayout);
-
-    const signoutBtn = header.querySelector('#signout-btn');
-
-    signoutBtn.addEventListener('click', authSignoutLogic)
-  } else {
-    const headerLayout = headerGuestLayout;
-    header.insertAdjacentHTML("beforeend", headerLayout);
-
-    const loginBtn = document.querySelector("#login-btn");
-    const signupBtn = document.querySelector("#signup-btn");
-    
-    loginBtn.addEventListener("click", () => {
-      popupsPoint.insertAdjacentHTML("beforeend", layoutLoginPopup);
-      renderPopupProperties();
-    });
-    signupBtn.addEventListener("click", () => {
-      popupsPoint.insertAdjacentHTML("beforeend", layoutSignupPopup);
-      renderPopupProperties();
-    });
-  }
-}
-headerRender();
-
-/* Render Sidebar Content Logic */
-const requestToSidebarContent = async () => {
-  try {
-    const response = await firebase.database().ref('/sidebar-info').once('value');
-    const data = response.val();
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-requestToSidebarContent()
-  .then(data => {
-    const bestPlayers = data.bestPlayers;
-    const bestResult = data.bestResult;
-    const latestResults = data.latestResults;
-    const bestPlayersLayout = renderSidebarElements(bestPlayers);
-    const bestResultsLayout = renderSidebarElements(bestResult);
-    const latestResultsLayout = renderSidebarElements(latestResults);
-    sidebar.insertAdjacentHTML("beforeend", bestPlayersLayout);
-    sidebar.insertAdjacentHTML("beforeend", bestResultsLayout);
-    sidebar.insertAdjacentHTML("beforeend", latestResultsLayout);
-  })
-  .catch(error => console.log(error));
-
-const authLoginLogic = (event) => {
-  event.preventDefault();
-
-  const email = event.target.querySelector('#email').value;
-  const password = event.target.querySelector('#password').value;
-  const errorBox = event.target.querySelector('#error');
-
-  firebase.auth().signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      headerRender(user);
-      popupsPoint.replaceChildren();
-    })
-    .catch((error) => {
-      errorBox.innerHTML = error.message;
-    });
-}
-
-const authSignupLogic = (event) => {
-  event.preventDefault();
-
-  const name = event.target.querySelector('#firstName').value;
-  const email = event.target.querySelector('#email').value;
-  const password = event.target.querySelector('#password').value;
-  const errorBox = event.target.querySelector('#error');
-
-  firebase.auth().createUserWithEmailAndPassword(email, password)
-  .then((userCredential) => {
-    const user = userCredential.user;
-
-    user.updateProfile({
-      displayName: name,
-      photoURL: 0,
-    })
-    .then(() => {
-      console.log('Имя пользователя успешно добавлено в профиль:', name);
-    })
-    .catch((error) => {
-      console.error('Ошибка при добавлении имени пользователя:', error.message);
-    });
-
-    headerRender(user);
-    popupsPoint.replaceChildren();
-  })
-  .catch((error) => {
-    errorBox.innerHTML = error.message;
-  });
-}
-
-const authSignoutLogic = () => {
-  firebase.auth().signOut()
-  .then(() => {
-    headerRender();
-  })
-  .catch((error) => {
-    console.error('Ошибка при выходе:', error.message);
-  });
-}
-
-const renderPopupProperties = (event) => {
-  const popupContainer = document.querySelector(".popup");
-  const closePopupBtn = popupContainer.querySelector(".close-btn");
-  const closeOverlay = popupContainer.querySelector(".overlay");
-  const passwordInput = popupContainer.querySelector(".password-input");
-  const passwordVisibleBtn = popupContainer.querySelector(".views-password");
-
-  passwordVisibleBtn.addEventListener("click", () => {
-    passwordInput.type === "text"
-      ? (passwordInput.type = "password")
-      : (passwordInput.type = "text");
-    passwordInput.focus();
-  });
-
-  if(popupContainer.classList.contains('popup_login')) {
-    const loginForm = popupContainer.querySelector('#login-form');
-    loginForm.addEventListener('submit', authLoginLogic);
-  } else {
-    const signupForm = popupContainer.querySelector('#signup-form');
-    signupForm.addEventListener('submit', authSignupLogic);
-  }
-
-  closePopupBtn.addEventListener("click", () => {
-    popupsPoint.replaceChildren();
-  });
-  closeOverlay.addEventListener("click", () => {
-    popupsPoint.replaceChildren();
-  });
-};
+/* LocalStorage */
+const localStorageUser = JSON.parse(localStorage.getItem('user')) || null;
 
 /* Game Variables */
-const gameContainer = document.querySelector("#quiz-box_container");
-const startQuizBtn = gameContainer.querySelector("#start-quiz-btn");
 let step = 0;
 let points = 0;
 let score = 0;
@@ -280,5 +140,192 @@ const startQuiz = async () => {
   });
 };
 
-startQuizBtn.addEventListener("click", startQuiz);
-startQuizBtn.addEventListener("touchstart", startQuiz);
+const authLoginLogic = (event) => {
+  event.preventDefault();
+
+  const email = event.target.querySelector('#email').value;
+  const password = event.target.querySelector('#password').value;
+  const rememberBtn = event.target.querySelector('#loginCheckbox').checked;
+  const errorBox = event.target.querySelector('#error');
+
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+
+      headerRender(user);
+      popupsPoint.replaceChildren();
+
+      if (rememberBtn) {
+        const userObj = {
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+        }
+        localStorage.setItem('user', JSON.stringify(userObj))
+      }
+      quizFirstScreenRender(user);
+    })
+    .catch((error) => {
+      errorBox.innerHTML = error.message;
+    });
+}
+
+const authSignupLogic = (event) => {
+  event.preventDefault();
+
+  const name = event.target.querySelector('#firstName').value;
+  const email = event.target.querySelector('#email').value;
+  const password = event.target.querySelector('#password').value;
+  const errorBox = event.target.querySelector('#error');
+
+  firebase.auth().createUserWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+    const user = userCredential.user;
+
+    user.updateProfile({
+      displayName: name,
+      photoURL: 0,
+    })
+    .then(() => {
+      const userObj = {
+        uid: user.uid,
+        displayName: name,
+        email: user.email,
+      }
+      localStorage.setItem('user', JSON.stringify(userObj))
+      headerRender(user);
+      quizFirstScreenRender(user);
+      popupsPoint.replaceChildren();
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
+  })
+  .catch((error) => {
+    errorBox.innerHTML = error.message;
+  });
+}
+
+const authSignoutLogic = () => {
+  firebase.auth().signOut()
+  .then(() => {
+    headerRender();
+    localStorage.removeItem('user');
+    quizFirstScreenRender();
+  })
+  .catch((error) => {
+    console.error(error.message);
+  });
+}
+
+/* Header Render */
+const headerRender = (user) => {
+  header.replaceChildren();
+
+  if(user) {
+    const headerLayout = renderHeaderLayout(user);
+    header.insertAdjacentHTML("beforeend", headerLayout);
+
+    const signoutBtn = header.querySelector('#signout-btn');
+
+    signoutBtn.addEventListener('click', authSignoutLogic)
+  } else {
+    const headerLayout = headerGuestLayout;
+    header.insertAdjacentHTML("beforeend", headerLayout);
+
+    const loginBtn = document.querySelector("#login-btn");
+    const signupBtn = document.querySelector("#signup-btn");
+    
+    loginBtn.addEventListener("click", () => {
+      popupsPoint.insertAdjacentHTML("beforeend", layoutLoginPopup);
+      renderPopupProperties();
+    });
+    signupBtn.addEventListener("click", () => {
+      popupsPoint.insertAdjacentHTML("beforeend", layoutSignupPopup);
+      renderPopupProperties();
+    });
+  }
+}
+
+/* Render Sidebar Content Logic */
+const requestToSidebarContent = async () => {
+  try {
+    const response = await firebase.database().ref('/sidebar-info').once('value');
+    const data = response.val();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+const sidebarRender = () => {
+  requestToSidebarContent()
+  .then(data => {
+    const bestPlayers = data.bestPlayers;
+    const bestResult = data.bestResult;
+    const latestResults = data.latestResults;
+    const bestPlayersLayout = renderSidebarElements(bestPlayers);
+    const bestResultsLayout = renderSidebarElements(bestResult);
+    const latestResultsLayout = renderSidebarElements(latestResults);
+    sidebar.insertAdjacentHTML("beforeend", bestPlayersLayout);
+    sidebar.insertAdjacentHTML("beforeend", bestResultsLayout);
+    sidebar.insertAdjacentHTML("beforeend", latestResultsLayout);
+  })
+  .catch(error => console.log(error));
+}
+
+const quizFirstScreenRender = (user) => {
+  gameContainer.replaceChildren();
+  if (user) {
+    gameContainer.insertAdjacentHTML("beforeend", quizForUser);
+
+    const startQuizBtn = gameContainer.querySelector("#start-quiz-btn");
+
+    startQuizBtn.addEventListener("click", startQuiz);
+    startQuizBtn.addEventListener("touchstart", startQuiz);
+  } else {
+    gameContainer.insertAdjacentHTML("beforeend", quizForGuest);
+  }
+}
+
+// First Render Logic
+const renderPage = () => {
+  if (localStorageUser) {
+    headerRender(localStorageUser);
+  } else {
+    headerRender();
+  }
+  quizFirstScreenRender(localStorageUser);
+  sidebarRender();
+}
+renderPage();
+
+const renderPopupProperties = (event) => {
+  const popupContainer = document.querySelector(".popup");
+  const closePopupBtn = popupContainer.querySelector(".close-btn");
+  const closeOverlay = popupContainer.querySelector(".overlay");
+  const passwordInput = popupContainer.querySelector(".password-input");
+  const passwordVisibleBtn = popupContainer.querySelector(".views-password");
+
+  passwordVisibleBtn.addEventListener("click", () => {
+    passwordInput.type === "text"
+      ? (passwordInput.type = "password")
+      : (passwordInput.type = "text");
+    passwordInput.focus();
+  });
+
+  if(popupContainer.classList.contains('popup_login')) {
+    const loginForm = popupContainer.querySelector('#login-form');
+    loginForm.addEventListener('submit', authLoginLogic);
+  } else {
+    const signupForm = popupContainer.querySelector('#signup-form');
+    signupForm.addEventListener('submit', authSignupLogic);
+  }
+
+  closePopupBtn.addEventListener("click", () => {
+    popupsPoint.replaceChildren();
+  });
+  closeOverlay.addEventListener("click", () => {
+    popupsPoint.replaceChildren();
+  });
+};
