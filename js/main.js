@@ -1,4 +1,4 @@
-import { layoutLoginPopup, layoutSignupPopup, headerGuestLayout, quizForGuest, quizForUser } from "./storage.js";
+import { layoutLoginPopup, layoutSignupPopup, headerGuestLayout, quizForGuest, quizForUser, loader, pageLoader } from "./storage.js";
 import { renredQuestion, renderResultQuiz, renderSidebarElements, renderHeaderLayout } from "./utils.js";
 import { database } from "./firebase.js";
 
@@ -13,6 +13,9 @@ const gameContainer = document.querySelector("#quiz-box_container");
 
 /* Popups */
 const popupsPoint = document.querySelector(".popups");
+
+/* LoaderBox */
+const loaderBox = document.querySelector('#page-loader');
 
 /* LocalStorage */
 const localStorageUser = JSON.parse(localStorage.getItem('user')) || null;
@@ -97,7 +100,7 @@ const startQuizAgain = () => {
 
 const getQuestions = async () => {
   gameContainer.replaceChildren();
-  gameContainer.insertAdjacentHTML("beforeend", `<div class="loader"><div></div><div></div><div></div></div>`);
+  gameContainer.insertAdjacentHTML("beforeend", loader);
   try {
     const response = await firebase.database().ref("/quiz").once("value");
     const data = response.val();
@@ -143,6 +146,8 @@ const startQuiz = async () => {
 const authLoginLogic = (event) => {
   event.preventDefault();
 
+  loaderBox.insertAdjacentHTML("beforeend", pageLoader);
+
   const email = event.target.querySelector('#email').value;
   const password = event.target.querySelector('#password').value;
   const rememberBtn = event.target.querySelector('#loginCheckbox').checked;
@@ -167,11 +172,16 @@ const authLoginLogic = (event) => {
     })
     .catch((error) => {
       errorBox.innerHTML = error.message;
+    })
+    .finally(() => {
+      loaderBox.replaceChildren();
     });
 }
 
 const authSignupLogic = (event) => {
   event.preventDefault();
+
+  loaderBox.insertAdjacentHTML("beforeend", pageLoader);
 
   const name = event.target.querySelector('#firstName').value;
   const email = event.target.querySelector('#email').value;
@@ -203,10 +213,14 @@ const authSignupLogic = (event) => {
   })
   .catch((error) => {
     errorBox.innerHTML = error.message;
+  })
+  .finally(() => {
+    loaderBox.replaceChildren();
   });
 }
 
 const authSignoutLogic = () => {
+  loaderBox.insertAdjacentHTML("beforeend", pageLoader);
   firebase.auth().signOut()
   .then(() => {
     headerRender();
@@ -215,6 +229,9 @@ const authSignoutLogic = () => {
   })
   .catch((error) => {
     console.error(error.message);
+  })
+  .finally(() => {
+    loaderBox.replaceChildren();
   });
 }
 

@@ -29,6 +29,14 @@ export const quizForUser = `
     </div>
 `;
 
+export const loader = `<div class="loader"><div></div><div></div><div></div></div>`;
+
+export const pageLoader = `
+    <div class="loader-box">
+        <div class="loader"><div></div><div></div><div></div></div>
+    </div>
+`;
+
 export const layoutLoginPopup = `
 <div class="popup popup_login">
         <div class="content">
