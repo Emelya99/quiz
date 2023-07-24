@@ -631,14 +631,14 @@ button {
   cursor: pointer;
 }
 .answears-box .item.true {
-  outline: 1px solid green;
-  border-color: green;
-  background: #fff;
+  color: #fff;
+  background: #4CAF50;
+  border-color: #4CAF50;
 }
 .answears-box .item.false {
-  outline: 1px solid red;
-  border-color: red;
-  background: #fff;
+  color: #FFF;
+  border-color: #F44336;
+  background: #F44336;
 }
 .answears-box .item:hover {
   background: #fafafa;

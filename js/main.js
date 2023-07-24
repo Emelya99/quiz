@@ -146,8 +146,6 @@ const startQuiz = async () => {
 const authLoginLogic = (event) => {
   event.preventDefault();
 
-  loaderBox.insertAdjacentHTML("beforeend", pageLoader);
-
   const email = event.target.querySelector('#email').value;
   const password = event.target.querySelector('#password').value;
   const rememberBtn = event.target.querySelector('#loginCheckbox').checked;
@@ -169,19 +167,18 @@ const authLoginLogic = (event) => {
         localStorage.setItem('user', JSON.stringify(userObj))
       }
       quizFirstScreenRender(user);
+      loaderBox.insertAdjacentHTML("beforeend", pageLoader);
+      setTimeout(() => {
+        loaderBox.replaceChildren();
+      },500)
     })
     .catch((error) => {
       errorBox.innerHTML = error.message;
-    })
-    .finally(() => {
-      loaderBox.replaceChildren();
     });
 }
 
 const authSignupLogic = (event) => {
   event.preventDefault();
-
-  loaderBox.insertAdjacentHTML("beforeend", pageLoader);
 
   const name = event.target.querySelector('#firstName').value;
   const email = event.target.querySelector('#email').value;
@@ -206,6 +203,10 @@ const authSignupLogic = (event) => {
       headerRender(user);
       quizFirstScreenRender(user);
       popupsPoint.replaceChildren();
+      loaderBox.insertAdjacentHTML("beforeend", pageLoader);
+      setTimeout(() => {
+        loaderBox.replaceChildren();
+      },500)
     })
     .catch((error) => {
       console.error(error.message);
@@ -214,9 +215,6 @@ const authSignupLogic = (event) => {
   .catch((error) => {
     errorBox.innerHTML = error.message;
   })
-  .finally(() => {
-    loaderBox.replaceChildren();
-  });
 }
 
 const authSignoutLogic = () => {
@@ -231,7 +229,9 @@ const authSignoutLogic = () => {
     console.error(error.message);
   })
   .finally(() => {
-    loaderBox.replaceChildren();
+    setTimeout(() => {
+      loaderBox.replaceChildren();
+    },500)
   });
 }
 
@@ -288,7 +288,8 @@ const sidebarRender = () => {
     sidebar.insertAdjacentHTML("beforeend", bestResultsLayout);
     sidebar.insertAdjacentHTML("beforeend", latestResultsLayout);
   })
-  .catch(error => console.log(error));
+  .catch(error => console.log(error))
+  .finally(() => loaderBox.replaceChildren());
 }
 
 const quizFirstScreenRender = (user) => {

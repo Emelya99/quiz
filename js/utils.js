@@ -106,12 +106,6 @@ export const renderResultQuiz = (points, score) => {
             <li>
                 Your result: <span>${points}</span> points
             </li>
-            <li>
-                Your global ranking: <span>22</span>
-            </li>
-            <li>
-                Your rank for a single game: <span>45</span>
-            </li>
         </ul>
         <div class="btn-container center">
             <button class="main-btn" id="start-quiz-again">Start new Game</button>
