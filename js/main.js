@@ -153,7 +153,7 @@ const getQuestions = async () => {
   }
 };
 
-const updateSidebarAfterGame = (points) => {
+const updateSidebarAfterGame = (points, score) => {
   const latestResultsRef = firebase.database().ref('sidebar-info/latestResults/data');
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -161,6 +161,7 @@ const updateSidebarAfterGame = (points) => {
     name: user.displayName, 
     id: user.uid,
     points: points,
+    score: score,
   }
 
   latestResultsRef.push(obj)
@@ -203,7 +204,7 @@ const startQuiz = async () => {
 
   if (step === 10) {
     sidebar.replaceChildren();
-    updateSidebarAfterGame(points);
+    updateSidebarAfterGame(points, score);
     gameContainer.replaceChildren();
     let resultHtmlLayout = renderResultQuiz(points, score);
     gameContainer.insertAdjacentHTML("beforeend", resultHtmlLayout);

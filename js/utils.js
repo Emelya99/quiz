@@ -36,7 +36,7 @@ export const renderSidebarElements = (obj) => {
           </div>
           <div class="user-info">
             <p class="user-name" title="${item.name} #${firstIdLetter}">${item.name} #${firstIdLetter}</p>
-            <p class="user-result" title="${item.points} points"><span>${item.points}</span> points</p>
+            <p class="user-result" title="${item.points} points"><span>${item.points}</span> points || <span>${item.score}</span>/10</p>
           </div>
         </div>
       </li>`;
