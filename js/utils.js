@@ -22,8 +22,11 @@ export const renderHeaderLayout = (user) => {
 }
 
 export const renderSidebarElements = (obj) => {
+  const data = obj.data;
+  const arr = Object.values(data);
   let arrLayouts = '';
-  obj.data.map(item => {
+  arr.map(item => {
+    let firstIdLetter = item.id.slice(0,4);
     let firstTitleLetter = item.name.slice(0,1);
     let content = `
       <li>
@@ -32,7 +35,7 @@ export const renderSidebarElements = (obj) => {
               <span>${firstTitleLetter}</span>
           </div>
           <div class="user-info">
-            <p class="user-name" title="${item.name} #7854">${item.name} #7854</p>
+            <p class="user-name" title="${item.name} #${firstIdLetter}">${item.name} #${firstIdLetter}</p>
             <p class="user-result" title="${item.points} points"><span>${item.points}</span> points</p>
           </div>
         </div>

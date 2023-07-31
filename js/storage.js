@@ -71,11 +71,7 @@ export const layoutLoginPopup = `
                         </svg>
                     </div>
                 </div>
-                <div class="checkbox-container">
-                    <input type="checkbox" id="loginCheckbox" name="loginCheckbox">
-                    <label for="loginCheckbox">Remember Me</label>
-                    <span class="checkmark"></span>
-                </div>
+                <div class="checkbox-container"></div>
                 <button class="submit-btn" id="submit-btn_login" type="submit">send</button>
                 <p class="error" id="error"></p>
             </form>

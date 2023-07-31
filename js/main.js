@@ -20,6 +20,48 @@ const loaderBox = document.querySelector('#page-loader');
 /* LocalStorage */
 const localStorageUser = JSON.parse(localStorage.getItem('user')) || null;
 
+/* Render Sidebar Content Logic */
+const requestToSidebarContent = async () => {
+  try {
+    const response = await firebase.database().ref('/sidebar-info').once('value');
+    const data = response.val();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+const sidebarRender = () => {
+  requestToSidebarContent()
+  .then(data => {
+    // const bestPlayers = data.bestPlayers;
+    // const bestResult = data.bestResult;
+    const latestResults = data.latestResults;
+    // const bestPlayersLayout = renderSidebarElements(bestPlayers);
+    // const bestResultsLayout = renderSidebarElements(bestResult);
+    const latestResultsLayout = renderSidebarElements(latestResults);
+    // sidebar.insertAdjacentHTML("beforeend", bestPlayersLayout);
+    // sidebar.insertAdjacentHTML("beforeend", bestResultsLayout);
+    sidebar.insertAdjacentHTML("beforeend", latestResultsLayout);
+  })
+  .catch(error => console.log(error))
+  .finally(() => loaderBox.replaceChildren());
+}
+
+const quizFirstScreenRender = (user) => {
+  gameContainer.replaceChildren();
+  if (user) {
+    gameContainer.insertAdjacentHTML("beforeend", quizForUser);
+
+    const startQuizBtn = gameContainer.querySelector("#start-quiz-btn");
+
+    startQuizBtn.addEventListener("click", startQuiz);
+    startQuizBtn.addEventListener("touchstart", startQuiz);
+  } else {
+    gameContainer.insertAdjacentHTML("beforeend", quizForGuest);
+  }
+}
+
 /* Game Variables */
 let step = 0;
 let points = 0;
@@ -111,6 +153,48 @@ const getQuestions = async () => {
   }
 };
 
+const updateSidebarAfterGame = (points) => {
+  const latestResultsRef = firebase.database().ref('sidebar-info/latestResults/data');
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  const obj = {
+    name: user.displayName, 
+    id: user.uid,
+    points: points,
+  }
+
+  latestResultsRef.push(obj)
+  .then(() => {
+    sidebarRender();
+  })
+  .catch((error) => {
+    console.error('Ошибка при обновлении данных пользователя:', error.message);
+  });
+
+  latestResultsRef.once('value')
+  .then((snapshot) => {
+    const items = snapshot.val();
+    const itemKeys = Object.keys(items);
+
+    if (itemKeys.length > 6) {
+    const itemsToRemove = itemKeys.slice(0, 1);
+
+    itemsToRemove.forEach((key) => {
+      latestResultsRef.child(key).remove()
+        .then(() => {
+          console.log('Элемент успешно удален:', key);
+        })
+        .catch((error) => {
+          console.error('Ошибка при удалении элемента:', key, error.message);
+        });
+    });
+    }
+  })
+  .catch((error) => {
+    console.error('Ошибка при получении данных:', error.message);
+  });
+}
+
 const startQuiz = async () => {
   if (step === 0) {
     questions = await getQuestions();
@@ -118,6 +202,8 @@ const startQuiz = async () => {
   let question = questions[step];
 
   if (step === 10) {
+    sidebar.replaceChildren();
+    updateSidebarAfterGame(points);
     gameContainer.replaceChildren();
     let resultHtmlLayout = renderResultQuiz(points, score);
     gameContainer.insertAdjacentHTML("beforeend", resultHtmlLayout);
@@ -148,7 +234,6 @@ const authLoginLogic = (event) => {
 
   const email = event.target.querySelector('#email').value;
   const password = event.target.querySelector('#password').value;
-  const rememberBtn = event.target.querySelector('#loginCheckbox').checked;
   const errorBox = event.target.querySelector('#error');
 
   firebase.auth().signInWithEmailAndPassword(email, password)
@@ -158,14 +243,8 @@ const authLoginLogic = (event) => {
       headerRender(user);
       popupsPoint.replaceChildren();
 
-      if (rememberBtn) {
-        const userObj = {
-          uid: user.uid,
-          displayName: user.displayName,
-          email: user.email,
-        }
-        localStorage.setItem('user', JSON.stringify(userObj))
-      }
+      localStorage.setItem('user', JSON.stringify(user));
+
       quizFirstScreenRender(user);
       loaderBox.insertAdjacentHTML("beforeend", pageLoader);
       setTimeout(() => {
@@ -194,12 +273,7 @@ const authSignupLogic = (event) => {
       photoURL: 0,
     })
     .then(() => {
-      const userObj = {
-        uid: user.uid,
-        displayName: name,
-        email: user.email,
-      }
-      localStorage.setItem('user', JSON.stringify(userObj))
+      localStorage.setItem('user', JSON.stringify(user));
       headerRender(user);
       quizFirstScreenRender(user);
       popupsPoint.replaceChildren();
@@ -214,7 +288,7 @@ const authSignupLogic = (event) => {
   })
   .catch((error) => {
     errorBox.innerHTML = error.message;
-  })
+  });
 }
 
 const authSignoutLogic = () => {
@@ -261,48 +335,6 @@ const headerRender = (user) => {
       popupsPoint.insertAdjacentHTML("beforeend", layoutSignupPopup);
       renderPopupProperties();
     });
-  }
-}
-
-/* Render Sidebar Content Logic */
-const requestToSidebarContent = async () => {
-  try {
-    const response = await firebase.database().ref('/sidebar-info').once('value');
-    const data = response.val();
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-const sidebarRender = () => {
-  requestToSidebarContent()
-  .then(data => {
-    const bestPlayers = data.bestPlayers;
-    const bestResult = data.bestResult;
-    const latestResults = data.latestResults;
-    const bestPlayersLayout = renderSidebarElements(bestPlayers);
-    const bestResultsLayout = renderSidebarElements(bestResult);
-    const latestResultsLayout = renderSidebarElements(latestResults);
-    sidebar.insertAdjacentHTML("beforeend", bestPlayersLayout);
-    sidebar.insertAdjacentHTML("beforeend", bestResultsLayout);
-    sidebar.insertAdjacentHTML("beforeend", latestResultsLayout);
-  })
-  .catch(error => console.log(error))
-  .finally(() => loaderBox.replaceChildren());
-}
-
-const quizFirstScreenRender = (user) => {
-  gameContainer.replaceChildren();
-  if (user) {
-    gameContainer.insertAdjacentHTML("beforeend", quizForUser);
-
-    const startQuizBtn = gameContainer.querySelector("#start-quiz-btn");
-
-    startQuizBtn.addEventListener("click", startQuiz);
-    startQuizBtn.addEventListener("touchstart", startQuiz);
-  } else {
-    gameContainer.insertAdjacentHTML("beforeend", quizForGuest);
   }
 }
 
