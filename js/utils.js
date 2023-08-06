@@ -5,7 +5,7 @@ export const renderHeaderLayout = (user) => {
       <a href="#" class="logo">
         <img src="images/logo.svg" alt="logo">
       </a>
-      <div class="user-profile">
+      <div class="user-profile" id="user-profile">
         <p class="name" title="${user.uid}">Hello,
           <span>${user.displayName} #${user.uid.substring(0, 4)}</span>👋
         </p>
@@ -19,6 +19,49 @@ export const renderHeaderLayout = (user) => {
   </div>
   `
   return renderHeaderLayoutContent;
+}
+
+export const renderProfilePopup = (user) => {
+  const firstTitleLetter = user.displayName.slice(0,1);
+  const accauntCreated = new Date(Number(user.createdAt));
+  const lastLogin = new Date(Number(user.lastLoginAt));
+
+  const profileLayout = `
+    <div class="popup popup_profile">
+      <div class="content">
+          <div class="left-part">
+            <div class="avatar-container"><span>${firstTitleLetter}</span></div>
+          </div>
+          <div class="right-part">
+            <ul class="user-info">
+              <li>
+                Name: <span>${user.displayName}</span>
+              </li>
+              <li>
+                Email: <span>${user.email}</span>
+              </li>
+              <li>
+                Id: <span>${user.uid}</span>
+              </li>
+              <li>
+                Account created: <span>${accauntCreated.toLocaleString()}</span>
+              </li>
+              <li>
+                Last login: <span>${lastLogin.toLocaleString()}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="close-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
+              <path
+                d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 42.28125 6.28125 L 25 23.5625 Z" />
+            </svg>
+          </div>
+      </div>
+      <div class="overlay"></div>
+    </div>
+  `;
+  return profileLayout;
 }
 
 export const renderSidebarElements = (obj) => {

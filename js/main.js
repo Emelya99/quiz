@@ -1,5 +1,5 @@
 import { layoutLoginPopup, layoutSignupPopup, headerGuestLayout, quizForGuest, quizForUser, loader, pageLoader } from "./storage.js";
-import { renredQuestion, renderResultQuiz, renderSidebarElements, renderHeaderLayout } from "./utils.js";
+import { renredQuestion, renderResultQuiz, renderSidebarElements, renderHeaderLayout, renderProfilePopup } from "./utils.js";
 import { database } from "./firebase.js";
 
 /* Header */
@@ -34,14 +34,8 @@ const requestToSidebarContent = async () => {
 const sidebarRender = () => {
   requestToSidebarContent()
   .then(data => {
-    // const bestPlayers = data.bestPlayers;
-    // const bestResult = data.bestResult;
     const latestResults = data.latestResults;
-    // const bestPlayersLayout = renderSidebarElements(bestPlayers);
-    // const bestResultsLayout = renderSidebarElements(bestResult);
     const latestResultsLayout = renderSidebarElements(latestResults);
-    // sidebar.insertAdjacentHTML("beforeend", bestPlayersLayout);
-    // sidebar.insertAdjacentHTML("beforeend", bestResultsLayout);
     sidebar.insertAdjacentHTML("beforeend", latestResultsLayout);
   })
   .catch(error => console.log(error))
@@ -240,11 +234,11 @@ const authLoginLogic = (event) => {
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
       const user = userCredential.user;
+      
+      localStorage.setItem('user', JSON.stringify(user));
 
       headerRender(user);
       popupsPoint.replaceChildren();
-
-      localStorage.setItem('user', JSON.stringify(user));
 
       quizFirstScreenRender(user);
       loaderBox.insertAdjacentHTML("beforeend", pageLoader);
@@ -275,9 +269,9 @@ const authSignupLogic = (event) => {
     })
     .then(() => {
       localStorage.setItem('user', JSON.stringify(user));
-      headerRender(user);
       quizFirstScreenRender(user);
       popupsPoint.replaceChildren();
+      headerRender(user);
       loaderBox.insertAdjacentHTML("beforeend", pageLoader);
       setTimeout(() => {
         loaderBox.replaceChildren();
@@ -310,6 +304,23 @@ const authSignoutLogic = () => {
   });
 }
 
+const renderProfile = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const profileRender = renderProfilePopup(user);
+  popupsPoint.insertAdjacentHTML("beforeend", profileRender);
+
+  const popupContainer = document.querySelector(".popup_profile");
+  const closePopupBtn = popupContainer.querySelector(".close-btn");
+  const closeOverlay = popupContainer.querySelector(".overlay");
+
+  closePopupBtn.addEventListener("click", () => {
+    popupsPoint.replaceChildren();
+  });
+  closeOverlay.addEventListener("click", () => {
+    popupsPoint.replaceChildren();
+  });
+}
+
 /* Header Render */
 const headerRender = (user) => {
   header.replaceChildren();
@@ -318,8 +329,10 @@ const headerRender = (user) => {
     const headerLayout = renderHeaderLayout(user);
     header.insertAdjacentHTML("beforeend", headerLayout);
 
+    const profilePopup = header.querySelector('#user-profile');
     const signoutBtn = header.querySelector('#signout-btn');
 
+    profilePopup.addEventListener('click', renderProfile)
     signoutBtn.addEventListener('click', authSignoutLogic)
   } else {
     const headerLayout = headerGuestLayout;

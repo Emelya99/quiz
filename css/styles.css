@@ -198,13 +198,18 @@ button {
 .header .user-profile {
   margin: 0 40px 0 auto;
 }
+.header .user-profile:hover .name span {
+  color: #212121;
+}
 .header .user-profile .name {
   font-weight: 500;
   font-size: 18px;
   line-height: 1.25em;
+  cursor: pointer;
 }
 .header .user-profile .name span {
   color: #4067ec;
+  transition: all 0.3s ease-in-out;
 }
 
 @media(max-width: 767px) {
@@ -387,8 +392,68 @@ button {
   line-height: 16px;
   color: red;
 }
+.popup.popup_profile .content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  max-width: 850px;
+}
+.popup.popup_profile .left-part {
+  position: relative;
+  width: 140px;
+}
+.popup.popup_profile .file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.popup.popup_profile .avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #e0e0e0;
+}
+.popup.popup_profile .avatar-container span {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 1.3em;
+  color: #212121;
+}
+.popup.popup_profile .img-container {
+  width: 140px;
+  height: 140px;
+}
+.popup.popup_profile .img-container img {
+  border-radius: 50%;
+}
+.popup.popup_profile .right-part {
+  width: calc(100% - 140px);
+  padding-left: 40px;
+}
+.popup.popup_profile .user-info {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+.popup.popup_profile .user-info li {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.5em;
+  word-break: break-word;
+}
+.popup.popup_profile .user-info li span {
+  font-weight: 400;
+}
 
 @media(max-width: 1024px) {
+  .popup.popup_profile {
+    padding: 30px;
+  }
   .popup .content {
     max-width: 450px;
     padding: 60px 40px;
@@ -396,6 +461,7 @@ button {
 }
 
 @media(max-width: 767px) {
+  .popup.popup_profile,
   .popup {
     padding: 15px;
   }
@@ -411,6 +477,32 @@ button {
   .popup .error {
     bottom: 5px;
     font-size: 12px;
+  }
+  .popup.popup_profile .content {
+    flex-direction: column;
+  }
+  .popup.popup_profile .left-part {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+  }
+  .popup.popup_profile .avatar-container {
+    width: 80px;
+    height: 80px;
+  }
+  .popup.popup_profile .img-container {
+    width: 80px;
+    height: 80px;
+  }
+  .popup.popup_profile .user-info li {
+    font-size: 16px;
+  }
+  .popup.popup_profile .user-info {
+    row-gap: 15px;
+  }
+  .popup.popup_profile .right-part {
+    width: 100%;
+    padding: 0;
   }
 }
 
