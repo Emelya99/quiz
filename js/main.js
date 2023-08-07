@@ -25,7 +25,6 @@ const requestToSidebarContent = async () => {
     return data;
   } catch (error) {
     console.error(error);
-    throw error;
   }
 };
 const sidebarRender = () => {
@@ -35,7 +34,7 @@ const sidebarRender = () => {
       const latestResultsLayout = renderSidebarElements(latestResults);
       sidebar.insertAdjacentHTML("beforeend", latestResultsLayout);
     })
-    .catch((error) => console.log(error))
+    .catch(error => console.log(error))
     .finally(() => loaderBox.replaceChildren());
 };
 
@@ -48,7 +47,6 @@ const quizFirstScreenRender = (user) => {
     const startQuizBtn = gameContainer.querySelector("#start-quiz-btn");
 
     startQuizBtn.addEventListener("click", startQuiz);
-    startQuizBtn.addEventListener("touchstart", startQuiz);
   } else {
     gameContainer.insertAdjacentHTML("beforeend", quizForGuest);
   }
@@ -92,9 +90,9 @@ const plusPointsVisible = (changePoints) => {
 // Також, додає кіл-сть правильних відповідає, зміну поінтів за гру.
 const answearHandler = (e, trueAnswear, answearsList) => {
   const nextQuestionBtn = gameContainer.querySelector("#next-question-btn");
+  const item = e.target;
+  const userAnswear = item.attributes.answear.value;
   let changePoints = 0;
-  let item = e.target;
-  let userAnswear = item.attributes.answear.value;
 
   if (userAnswear == trueAnswear) {
     currentAnswearsInRow += 1;
@@ -106,7 +104,7 @@ const answearHandler = (e, trueAnswear, answearsList) => {
     changePoints += 5 + currentAnswearsInRow * 5 + threeAnswearsInRow + fiveAnswearsInRow + sevenAnswearsInRow + tenAnswearsInRow;
     item.classList.add("true");
   } else {
-    let trueAnswearItem = gameContainer.querySelector(
+    const trueAnswearItem = gameContainer.querySelector(
       `[answear="${trueAnswear}"]`
     );
     currentAnswearsInRow = 0;
@@ -118,7 +116,6 @@ const answearHandler = (e, trueAnswear, answearsList) => {
   plusPointsVisible(changePoints);
   nextQuestionBtn.classList.remove("disabled");
   nextQuestionBtn.addEventListener("click", nextQuestion);
-  nextQuestionBtn.addEventListener("touchstart", nextQuestion);
 
   answearsList.forEach((item) => {
     item.style.pointerEvents = "none";
@@ -134,7 +131,6 @@ const startQuizAgain = () => {
   currentAnswearsInRow = 0;
   questions = [];
   startAgainBtn.addEventListener("click", startQuiz);
-  startAgainBtn.addEventListener("touchstart", startQuiz);
 };
 
 // Отримуємо всі питання, рандомно сортуємо і залишаємо тільки 10
@@ -204,15 +200,17 @@ const startQuiz = async () => {
   if (step === 10) {
     sidebar.replaceChildren();
     updateSidebarAfterGame(points, score);
+
     gameContainer.replaceChildren();
-    let resultHtmlLayout = renderResultQuiz(points, score);
+    const resultHtmlLayout = renderResultQuiz(points, score);
     gameContainer.insertAdjacentHTML("beforeend", resultHtmlLayout);
+
     startQuizAgain();
     return;
   }
 
   gameContainer.replaceChildren();
-  let questionsHtmlLayout = renredQuestion(question, step, points);
+  const questionsHtmlLayout = renredQuestion(question, step, points);
   gameContainer.insertAdjacentHTML("beforeend", questionsHtmlLayout);
 
   step += 1;
@@ -223,15 +221,12 @@ const startQuiz = async () => {
     item.addEventListener("click", function (e) {
       answearHandler(e, question.answer, answearsList);
     });
-    item.addEventListener("touchstart", function (e) {
-      answearHandler(e, question.answer, answearsList);
-    });
   });
 };
 
-//  Функція для авторизації
-const authLoginLogic = (event) => {
-  event.preventDefault();
+// Функція для авторизації
+const authLoginLogic = (e) => {
+  e.preventDefault();
 
   const email = event.target.querySelector("#email").value;
   const password = event.target.querySelector("#password").value;
@@ -250,6 +245,7 @@ const authLoginLogic = (event) => {
 
       quizFirstScreenRender(user);
       loaderBox.insertAdjacentHTML("beforeend", pageLoader);
+
       setTimeout(() => {
         loaderBox.replaceChildren();
       }, 500);
@@ -260,8 +256,8 @@ const authLoginLogic = (event) => {
 };
 
 // Функція для регістрації
-const authSignupLogic = (event) => {
-  event.preventDefault();
+const authSignupLogic = (e) => {
+  e.preventDefault();
 
   const name = event.target.querySelector("#firstName").value;
   const email = event.target.querySelector("#email").value;
@@ -284,7 +280,9 @@ const authSignupLogic = (event) => {
           quizFirstScreenRender(user);
           popupsPoint.replaceChildren();
           headerRender(user);
+
           loaderBox.insertAdjacentHTML("beforeend", pageLoader);
+
           setTimeout(() => {
             loaderBox.replaceChildren();
           }, 500);
@@ -298,8 +296,10 @@ const authSignupLogic = (event) => {
     });
 };
 
+// Вихід з аккаунту
 const authSignoutLogic = () => {
   loaderBox.insertAdjacentHTML("beforeend", pageLoader);
+
   firebase
     .auth()
     .signOut()
@@ -321,6 +321,7 @@ const authSignoutLogic = () => {
 // Відображає попап з персональною інформацією користувача
 const renderProfile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  
   const profileRender = renderProfilePopup(user);
   popupsPoint.insertAdjacentHTML("beforeend", profileRender);
 

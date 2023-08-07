@@ -72,9 +72,9 @@ export const renderSidebarElements = (obj) => {
   const arr = Object.values(data);
   let arrLayouts = "";
   arr.map((item) => {
-    let firstIdLetter = item.id.slice(0, 4);
-    let firstTitleLetter = item.name.slice(0, 1);
-    let content = `
+    const firstIdLetter = item.id.slice(0, 4);
+    const firstTitleLetter = item.name.slice(0, 1);
+    const content = `
       <li>
         <div class="user-box">
           <div class="user-img">

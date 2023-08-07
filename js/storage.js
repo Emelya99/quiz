@@ -52,7 +52,7 @@ export const layoutLoginPopup = `
                 <div class="input-box">
                     <span class="input-title">EMAIL ADRRESS</span>
                     <input class="default-input" type="email" id="email" placeholder="Enter Email Adrress" autocomplete="off"
-                        max="30" required>
+                        maxlength="35" required>
                 </div>
                 <div class="input-box">
                     <span class="input-title">PASSWORD</span>
@@ -101,12 +101,12 @@ export const layoutSignupPopup = `
             <form id="signup-form">
                 <div class="input-box">
                     <span class="input-title">FIRST NAME</span>
-                    <input class="default-input" type="text" id="firstName" placeholder="Enter First Name" autocomplete="off" max="20" required>
+                    <input class="default-input" type="text" id="firstName" placeholder="Enter First Name" autocomplete="off" maxlength="15" required>
                 </div>
                 <div class="input-box">
                     <span class="input-title">EMAIL ADRRESS</span>
                     <input class="default-input" type="email" id="email" placeholder="Enter Email Adrress" autocomplete="off"
-                        max="30" required>
+                        maxlength="35" required>
                 </div>
                 <div class="input-box">
                     <span class="input-title">PASSWORD</span>
