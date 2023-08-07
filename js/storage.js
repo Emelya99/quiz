@@ -1,3 +1,4 @@
+// Хедер для гостя
 export const headerGuestLayout = `
 <div class="container">
     <div class="inner">
@@ -16,8 +17,10 @@ export const headerGuestLayout = `
   </div>
 `;
 
+// Єкран вікторини для гостя
 export const quizForGuest = `<h2 class="title">To start the quiz, you need to log in or register.</h2>`;
 
+// Єкран вікторини для авторизованого користувача
 export const quizForUser = `
     <h2 class="title">
         Rules: There are 10 questions with one correct answer each. The more correct answers
@@ -29,14 +32,17 @@ export const quizForUser = `
     </div>
 `;
 
+// Маленький прелоадер для вікторини коли йде запрос за питаннями
 export const loader = `<div class="loader"><div></div><div></div><div></div></div>`;
 
+// Прелоадер для першого рендеру, після авторизації
 export const pageLoader = `
     <div class="loader-box">
         <div class="loader"><div></div><div></div><div></div></div>
     </div>
 `;
 
+// Попап для авторизації
 export const layoutLoginPopup = `
 <div class="popup popup_login">
         <div class="content">
@@ -46,7 +52,7 @@ export const layoutLoginPopup = `
                 <div class="input-box">
                     <span class="input-title">EMAIL ADRRESS</span>
                     <input class="default-input" type="email" id="email" placeholder="Enter Email Adrress" autocomplete="off"
-                        required>
+                        max="30" required>
                 </div>
                 <div class="input-box">
                     <span class="input-title">PASSWORD</span>
@@ -86,6 +92,7 @@ export const layoutLoginPopup = `
     </div>
 `;
 
+// Попап для реєстрації
 export const layoutSignupPopup = `
 <div class="popup popup_signup">
         <div class="content">
@@ -94,12 +101,12 @@ export const layoutSignupPopup = `
             <form id="signup-form">
                 <div class="input-box">
                     <span class="input-title">FIRST NAME</span>
-                    <input class="default-input" type="text" id="firstName" placeholder="Enter First Name" autocomplete="off" required>
+                    <input class="default-input" type="text" id="firstName" placeholder="Enter First Name" autocomplete="off" max="20" required>
                 </div>
                 <div class="input-box">
                     <span class="input-title">EMAIL ADRRESS</span>
                     <input class="default-input" type="email" id="email" placeholder="Enter Email Adrress" autocomplete="off"
-                        required>
+                        max="30" required>
                 </div>
                 <div class="input-box">
                     <span class="input-title">PASSWORD</span>

@@ -90,6 +90,23 @@ button {
   font-weight: 700;
   line-height: 1.25em;
 }
+.page-title {
+  margin-bottom: 45px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.4em;
+}
+@media(max-width: 1200px) {
+  .page-title {
+    margin-bottom: 20px;
+  }
+}
+@media(max-width: 767px) {
+  .page-title {
+    font-size: 24px;
+  }
+}
 .box-shadow {
   border-radius: 10px;
   box-shadow: 0px 7px 29px 0px rgba(100, 100, 111, 0.2);
@@ -419,6 +436,7 @@ button {
   background: #e0e0e0;
 }
 .popup.popup_profile .avatar-container span {
+  text-transform: uppercase;
   font-weight: 500;
   font-size: 30px;
   line-height: 1.3em;
@@ -549,7 +567,7 @@ button {
     margin: -10px;
   }
   .quiz aside > .item {
-    width: 33.33%;
+    width: 50%;
     padding: 10px;
   }
   .quiz .sidebar .item:not(:last-child) {
@@ -560,12 +578,6 @@ button {
 @media(max-width: 1024px) {
   .quiz {
     padding: 60px 0;
-  }
-}
-
-@media(max-width: 767px) {
-  .quiz aside > .item {
-    width: 50%;
   }
 }
 

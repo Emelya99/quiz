@@ -1,3 +1,4 @@
+// Хедер для зареєстрованого користувача
 export const renderHeaderLayout = (user) => {
   const renderHeaderLayoutContent = `
   <div class="container">
@@ -17,12 +18,13 @@ export const renderHeaderLayout = (user) => {
       </ul>
     </div>
   </div>
-  `
+  `;
   return renderHeaderLayoutContent;
-}
+};
 
+// Попап з інформацією користувача
 export const renderProfilePopup = (user) => {
-  const firstTitleLetter = user.displayName.slice(0,1);
+  const firstTitleLetter = user.displayName.slice(0, 1);
   const accauntCreated = new Date(Number(user.createdAt));
   const lastLogin = new Date(Number(user.lastLoginAt));
 
@@ -62,15 +64,16 @@ export const renderProfilePopup = (user) => {
     </div>
   `;
   return profileLayout;
-}
+};
 
+// Блок з сайдбару, можливий вивід різних показників користувачів
 export const renderSidebarElements = (obj) => {
   const data = obj.data;
   const arr = Object.values(data);
-  let arrLayouts = '';
-  arr.map(item => {
-    let firstIdLetter = item.id.slice(0,4);
-    let firstTitleLetter = item.name.slice(0,1);
+  let arrLayouts = "";
+  arr.map((item) => {
+    let firstIdLetter = item.id.slice(0, 4);
+    let firstTitleLetter = item.name.slice(0, 1);
     let content = `
       <li>
         <div class="user-box">
@@ -84,8 +87,8 @@ export const renderSidebarElements = (obj) => {
         </div>
       </li>`;
     arrLayouts += content;
-  })
-  let sidebarElementHtmlLayout = `
+  });
+  const sidebarElementHtmlLayout = `
   <div class="item">
     <div class="sidebar-box ${obj.info.class} box-shadow">
       <h3 class="title">${obj.info.title}</h3>
@@ -98,8 +101,9 @@ export const renderSidebarElements = (obj) => {
   return sidebarElementHtmlLayout;
 };
 
+// Блок з запитанням
 export const renredQuestion = (obj, step, points) => {
-  let questionsHtmlLayout = `
+  const questionsHtmlLayout = `
     <div class="quiz-question">
       <h2 class="title">${obj.question}</h2>
       <ul class="answears-box">
@@ -124,6 +128,7 @@ export const renredQuestion = (obj, step, points) => {
   return questionsHtmlLayout;
 };
 
+// Блок після проходження вікторини
 export const renderResultQuiz = (points, score) => {
   let successMessage = "";
 
@@ -145,7 +150,7 @@ export const renderResultQuiz = (points, score) => {
     successMessage = "Don't give up! With more practice, you can do better!";
   }
 
-  let resultHtmlLayout = `
+  const resultHtmlLayout = `
     <div class="quiz-result">
         <h2 class="title">${successMessage} <span>${score}</span>/10</h2>
         <ul class="quiz-result_list">

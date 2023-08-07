@@ -1,47 +1,45 @@
-import { layoutLoginPopup, layoutSignupPopup, headerGuestLayout, quizForGuest, quizForUser, loader, pageLoader } from "./storage.js";
-import { renredQuestion, renderResultQuiz, renderSidebarElements, renderHeaderLayout, renderProfilePopup } from "./utils.js";
+import { layoutLoginPopup, layoutSignupPopup, headerGuestLayout,
+  quizForGuest, quizForUser, loader,  pageLoader} from "./storage.js";
+import { renredQuestion, renderResultQuiz, renderSidebarElements,
+  renderHeaderLayout, renderProfilePopup } from "./utils.js";
 import { database } from "./firebase.js";
 
-/* Header */
+// Змінні які доступні завжди і від них будується логіка сайту
 const header = document.querySelector("#header");
-
-/* Sidebar */
-const sidebar = document.querySelector('#sidebar');
-
-/* Quiz Container */
+const sidebar = document.querySelector("#sidebar");
 const gameContainer = document.querySelector("#quiz-box_container");
-
-/* Popups */
 const popupsPoint = document.querySelector(".popups");
+const loaderBox = document.querySelector("#page-loader");
 
-/* LoaderBox */
-const loaderBox = document.querySelector('#page-loader');
+// Localstorage User - Тут зберігається об'єкт авторизованого користувача
+const localStorageUser = JSON.parse(localStorage.getItem("user")) || null;
 
-/* LocalStorage */
-const localStorageUser = JSON.parse(localStorage.getItem('user')) || null;
-
-/* Render Sidebar Content Logic */
+// Рендер сайдбару
 const requestToSidebarContent = async () => {
   try {
-    const response = await firebase.database().ref('/sidebar-info').once('value');
+    const response = await firebase
+      .database()
+      .ref("/sidebar-info")
+      .once("value");
     const data = response.val();
     return data;
   } catch (error) {
     console.error(error);
     throw error;
   }
-}
+};
 const sidebarRender = () => {
   requestToSidebarContent()
-  .then(data => {
-    const latestResults = data.latestResults;
-    const latestResultsLayout = renderSidebarElements(latestResults);
-    sidebar.insertAdjacentHTML("beforeend", latestResultsLayout);
-  })
-  .catch(error => console.log(error))
-  .finally(() => loaderBox.replaceChildren());
-}
+    .then((data) => {
+      const latestResults = data.latestResults;
+      const latestResultsLayout = renderSidebarElements(latestResults);
+      sidebar.insertAdjacentHTML("beforeend", latestResultsLayout);
+    })
+    .catch((error) => console.log(error))
+    .finally(() => loaderBox.replaceChildren());
+};
 
+// Рендер єкрану вікторини в залежності від статусу користувача
 const quizFirstScreenRender = (user) => {
   gameContainer.replaceChildren();
   if (user) {
@@ -54,19 +52,21 @@ const quizFirstScreenRender = (user) => {
   } else {
     gameContainer.insertAdjacentHTML("beforeend", quizForGuest);
   }
-}
+};
 
-/* Game Variables */
+// Змінні та логіка вікторини
 let step = 0;
 let points = 0;
 let score = 0;
 let currentAnswearsInRow = 0;
 let questions = [];
 
+// Запускає функцію квізу ще раз для того щоб відобразити нові питання
 const nextQuestion = () => {
   startQuiz();
 };
 
+// Додає поінти та відображає як вони змінилися після відповіді
 const plusPointsVisible = (changePoints) => {
   const countPointsBox = gameContainer.querySelector(".quiz-question .points");
   points += changePoints;
@@ -88,12 +88,14 @@ const plusPointsVisible = (changePoints) => {
   }, 1000);
 };
 
+// Функція яка працює з відповіддю користувача на питання в вікторині
+// Також, додає кіл-сть правильних відповідає, зміну поінтів за гру.
 const answearHandler = (e, trueAnswear, answearsList) => {
   const nextQuestionBtn = gameContainer.querySelector("#next-question-btn");
   let changePoints = 0;
   let item = e.target;
   let userAnswear = item.attributes.answear.value;
-  
+
   if (userAnswear == trueAnswear) {
     currentAnswearsInRow += 1;
     let threeAnswearsInRow = currentAnswearsInRow >= 3 ? currentAnswearsInRow * 2 : 0;
@@ -101,7 +103,7 @@ const answearHandler = (e, trueAnswear, answearsList) => {
     let sevenAnswearsInRow = currentAnswearsInRow >= 7 ? currentAnswearsInRow * 6 : 0;
     let tenAnswearsInRow = currentAnswearsInRow >= 10 ? currentAnswearsInRow * 10 : 0;
     score += 1;
-    changePoints += 5 + (currentAnswearsInRow * 5) + threeAnswearsInRow + fiveAnswearsInRow + sevenAnswearsInRow + tenAnswearsInRow;
+    changePoints += 5 + currentAnswearsInRow * 5 + threeAnswearsInRow + fiveAnswearsInRow + sevenAnswearsInRow + tenAnswearsInRow;
     item.classList.add("true");
   } else {
     let trueAnswearItem = gameContainer.querySelector(
@@ -123,6 +125,7 @@ const answearHandler = (e, trueAnswear, answearsList) => {
   });
 };
 
+// Обнуляє значення змінних, запускає вікторину спочатку
 const startQuizAgain = () => {
   const startAgainBtn = gameContainer.querySelector("#start-quiz-again");
   step = 0;
@@ -134,6 +137,7 @@ const startQuizAgain = () => {
   startAgainBtn.addEventListener("touchstart", startQuiz);
 };
 
+// Отримуємо всі питання, рандомно сортуємо і залишаємо тільки 10
 const getQuestions = async () => {
   gameContainer.replaceChildren();
   gameContainer.insertAdjacentHTML("beforeend", loader);
@@ -147,49 +151,50 @@ const getQuestions = async () => {
   }
 };
 
+// Ререндер сайдбару після завершення гри для оновлення списка останніх ігор
 const updateSidebarAfterGame = (points, score) => {
-  const latestResultsRef = firebase.database().ref('sidebar-info/latestResults/data');
-  const user = JSON.parse(localStorage.getItem('user'));
+  const latestResultsRef = firebase
+    .database()
+    .ref("sidebar-info/latestResults/data");
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const obj = {
-    name: user.displayName, 
+    name: user.displayName,
     id: user.uid,
     points: points,
     score: score,
-  }
+  };
 
-  latestResultsRef.push(obj)
-  .then(() => {
-    sidebarRender();
-  })
-  .catch((error) => {
-    console.error('Ошибка при обновлении данных пользователя:', error.message);
-  });
+  latestResultsRef
+    .push(obj)
+    .then(() => {
+      sidebarRender();
+    })
+    .catch((error) => console.log(error));
 
-  latestResultsRef.once('value')
-  .then((snapshot) => {
-    const items = snapshot.val();
-    const itemKeys = Object.keys(items);
+  // Видалення зайвої історії ігор
+  latestResultsRef
+    .once("value")
+    .then((snapshot) => {
+      const items = snapshot.val();
+      const itemKeys = Object.keys(items);
 
-    if (itemKeys.length > 6) {
-    const itemsToRemove = itemKeys.slice(0, 1);
+      if (itemKeys.length > 6) {
+        const itemsToRemove = itemKeys.slice(0, 1);
 
-    itemsToRemove.forEach((key) => {
-      latestResultsRef.child(key).remove()
-        .then(() => {
-          console.log('Элемент успешно удален:', key);
-        })
-        .catch((error) => {
-          console.error('Ошибка при удалении элемента:', key, error.message);
+        itemsToRemove.forEach((key) => {
+          latestResultsRef
+            .child(key)
+            .remove()
+            .then(() => console.log(`${key} has deleted`))
+            .catch((error) => console.log(error.message));
         });
-    });
-    }
-  })
-  .catch((error) => {
-    console.error('Ошибка при получении данных:', error.message);
-  });
-}
+      }
+    })
+    .catch((error) => console.log(error.message));
+};
 
+// Головна функція вікторини, яка делегує обов'язки між функціями
 const startQuiz = async () => {
   if (step === 0) {
     questions = await getQuestions();
@@ -224,18 +229,21 @@ const startQuiz = async () => {
   });
 };
 
+//  Функція для авторизації
 const authLoginLogic = (event) => {
   event.preventDefault();
 
-  const email = event.target.querySelector('#email').value;
-  const password = event.target.querySelector('#password').value;
-  const errorBox = event.target.querySelector('#error');
+  const email = event.target.querySelector("#email").value;
+  const password = event.target.querySelector("#password").value;
+  const errorBox = event.target.querySelector("#error");
 
-  firebase.auth().signInWithEmailAndPassword(email, password)
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      
-      localStorage.setItem('user', JSON.stringify(user));
+
+      localStorage.setItem("user", JSON.stringify(user));
 
       headerRender(user);
       popupsPoint.replaceChildren();
@@ -244,68 +252,75 @@ const authLoginLogic = (event) => {
       loaderBox.insertAdjacentHTML("beforeend", pageLoader);
       setTimeout(() => {
         loaderBox.replaceChildren();
-      },500)
+      }, 500);
     })
     .catch((error) => {
       errorBox.innerHTML = error.message;
     });
-}
+};
 
+// Функція для регістрації
 const authSignupLogic = (event) => {
   event.preventDefault();
 
-  const name = event.target.querySelector('#firstName').value;
-  const email = event.target.querySelector('#email').value;
-  const password = event.target.querySelector('#password').value;
-  const errorBox = event.target.querySelector('#error');
+  const name = event.target.querySelector("#firstName").value;
+  const email = event.target.querySelector("#email").value;
+  const password = event.target.querySelector("#password").value;
+  const errorBox = event.target.querySelector("#error");
 
-  firebase.auth().createUserWithEmailAndPassword(email, password)
-  .then((userCredential) => {
-    const user = userCredential.user;
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
 
-    user.updateProfile({
-      displayName: name,
-      photoURL: 0,
-    })
-    .then(() => {
-      localStorage.setItem('user', JSON.stringify(user));
-      quizFirstScreenRender(user);
-      popupsPoint.replaceChildren();
-      headerRender(user);
-      loaderBox.insertAdjacentHTML("beforeend", pageLoader);
-      setTimeout(() => {
-        loaderBox.replaceChildren();
-      },500)
+      user
+        .updateProfile({
+          displayName: name,
+          photoURL: 0,
+        })
+        .then(() => {
+          localStorage.setItem("user", JSON.stringify(user));
+          quizFirstScreenRender(user);
+          popupsPoint.replaceChildren();
+          headerRender(user);
+          loaderBox.insertAdjacentHTML("beforeend", pageLoader);
+          setTimeout(() => {
+            loaderBox.replaceChildren();
+          }, 500);
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
     })
     .catch((error) => {
-      console.error(error.message);
+      errorBox.innerHTML = error.message;
     });
-  })
-  .catch((error) => {
-    errorBox.innerHTML = error.message;
-  });
-}
+};
 
 const authSignoutLogic = () => {
   loaderBox.insertAdjacentHTML("beforeend", pageLoader);
-  firebase.auth().signOut()
-  .then(() => {
-    headerRender();
-    localStorage.removeItem('user');
-    quizFirstScreenRender();
-  })
-  .catch((error) => {
-    console.error(error.message);
-  })
-  .finally(() => {
-    setTimeout(() => {
-      loaderBox.replaceChildren();
-    },500)
-  });
-}
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      headerRender();
+      localStorage.removeItem("user");
+      quizFirstScreenRender();
+    })
+    .catch((error) => {
+      console.error(error.message);
+    })
+    .finally(() => {
+      setTimeout(() => {
+        loaderBox.replaceChildren();
+      }, 500);
+    });
+};
 
+// Відображає попап з персональною інформацією користувача
 const renderProfile = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem("user"));
   const profileRender = renderProfilePopup(user);
   popupsPoint.insertAdjacentHTML("beforeend", profileRender);
 
@@ -319,28 +334,28 @@ const renderProfile = () => {
   closeOverlay.addEventListener("click", () => {
     popupsPoint.replaceChildren();
   });
-}
+};
 
-/* Header Render */
+// Рендер хедера в залежності від статусу користувача
 const headerRender = (user) => {
   header.replaceChildren();
 
-  if(user) {
+  if (user) {
     const headerLayout = renderHeaderLayout(user);
     header.insertAdjacentHTML("beforeend", headerLayout);
 
-    const profilePopup = header.querySelector('#user-profile');
-    const signoutBtn = header.querySelector('#signout-btn');
+    const profilePopup = header.querySelector("#user-profile");
+    const signoutBtn = header.querySelector("#signout-btn");
 
-    profilePopup.addEventListener('click', renderProfile)
-    signoutBtn.addEventListener('click', authSignoutLogic)
+    profilePopup.addEventListener("click", renderProfile);
+    signoutBtn.addEventListener("click", authSignoutLogic);
   } else {
     const headerLayout = headerGuestLayout;
     header.insertAdjacentHTML("beforeend", headerLayout);
 
     const loginBtn = document.querySelector("#login-btn");
     const signupBtn = document.querySelector("#signup-btn");
-    
+
     loginBtn.addEventListener("click", () => {
       popupsPoint.insertAdjacentHTML("beforeend", layoutLoginPopup);
       renderPopupProperties();
@@ -350,9 +365,9 @@ const headerRender = (user) => {
       renderPopupProperties();
     });
   }
-}
+};
 
-// First Render Logic
+// Пергий рендер сторінки
 const renderPage = () => {
   if (localStorageUser) {
     headerRender(localStorageUser);
@@ -361,10 +376,11 @@ const renderPage = () => {
   }
   quizFirstScreenRender(localStorageUser);
   sidebarRender();
-}
+};
 renderPage();
 
-const renderPopupProperties = (event) => {
+// Функція для попапів авторизації та реєстрації
+const renderPopupProperties = () => {
   const popupContainer = document.querySelector(".popup");
   const closePopupBtn = popupContainer.querySelector(".close-btn");
   const closeOverlay = popupContainer.querySelector(".overlay");
@@ -378,12 +394,12 @@ const renderPopupProperties = (event) => {
     passwordInput.focus();
   });
 
-  if(popupContainer.classList.contains('popup_login')) {
-    const loginForm = popupContainer.querySelector('#login-form');
-    loginForm.addEventListener('submit', authLoginLogic);
+  if (popupContainer.classList.contains("popup_login")) {
+    const loginForm = popupContainer.querySelector("#login-form");
+    loginForm.addEventListener("submit", authLoginLogic);
   } else {
-    const signupForm = popupContainer.querySelector('#signup-form');
-    signupForm.addEventListener('submit', authSignupLogic);
+    const signupForm = popupContainer.querySelector("#signup-form");
+    signupForm.addEventListener("submit", authSignupLogic);
   }
 
   closePopupBtn.addEventListener("click", () => {
