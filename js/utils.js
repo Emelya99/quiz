@@ -165,3 +165,9 @@ export const renderResultQuiz = (points, score) => {
     `;
   return resultHtmlLayout;
 };
+
+// Видалення всіх оброботчиків з єлемента
+export const removeAllEventListeners = element => {
+  const clone = element.cloneNode(true);
+  element.parentNode.replaceChild(clone, element);
+}

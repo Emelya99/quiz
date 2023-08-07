@@ -1,7 +1,7 @@
 import { layoutLoginPopup, layoutSignupPopup, headerGuestLayout,
   quizForGuest, quizForUser, loader,  pageLoader} from "./storage.js";
 import { renredQuestion, renderResultQuiz, renderSidebarElements,
-  renderHeaderLayout, renderProfilePopup } from "./utils.js";
+  renderHeaderLayout, renderProfilePopup, removeAllEventListeners } from "./utils.js";
 import { database } from "./firebase.js";
 
 // Змінні які доступні завжди і від них будується логіка сайту
@@ -118,7 +118,7 @@ const answearHandler = (e, trueAnswear, answearsList) => {
   nextQuestionBtn.addEventListener("click", nextQuestion);
 
   answearsList.forEach((item) => {
-    item.style.pointerEvents = "none";
+    removeAllEventListeners(item);
   });
 };
 
@@ -321,7 +321,7 @@ const authSignoutLogic = () => {
 // Відображає попап з персональною інформацією користувача
 const renderProfile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  
+
   const profileRender = renderProfilePopup(user);
   popupsPoint.insertAdjacentHTML("beforeend", profileRender);
 

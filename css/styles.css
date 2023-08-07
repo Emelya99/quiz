@@ -734,12 +734,14 @@ button {
   transition: all 0.3s ease-in-out;
   cursor: pointer;
 }
-.answears-box .item.true {
+.answears-box .item.true,
+.answears-box .item.true:hover {
   color: #fff;
   background: #4CAF50;
   border-color: #4CAF50;
 }
-.answears-box .item.false {
+.answears-box .item.false,
+.answears-box .item.false:hover {
   color: #FFF;
   border-color: #F44336;
   background: #F44336;
