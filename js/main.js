@@ -122,14 +122,21 @@ const answearHandler = (e, trueAnswear, answearsList) => {
   });
 };
 
-// Обнуляє значення змінних, запускає вікторину спочатку
-const startQuizAgain = () => {
-  const startAgainBtn = gameContainer.querySelector("#start-quiz-again");
+// Обнуляє значення змінних для вікторини
+const zeroingQuizValues = () => {
   step = 0;
   points = 0;
   score = 0;
   currentAnswearsInRow = 0;
   questions = [];
+}
+
+// Обнуляє значення змінних, запускає вікторину спочатку
+const startQuizAgain = () => {
+  const startAgainBtn = gameContainer.querySelector("#start-quiz-again");
+
+  zeroingQuizValues();
+
   startAgainBtn.addEventListener("click", startQuiz);
 };
 
@@ -306,6 +313,7 @@ const authSignoutLogic = () => {
     .then(() => {
       headerRender();
       localStorage.removeItem("user");
+      zeroingQuizValues();
       quizFirstScreenRender();
     })
     .catch((error) => {
